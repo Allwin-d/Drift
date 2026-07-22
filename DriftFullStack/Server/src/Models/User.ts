@@ -17,6 +17,7 @@ export const userSchema = new mongoose.Schema({
   passwordHash: {
     type: String,
     required: [true, "Password is required"],
+    minLength : [8,"Password should be at least 8 characters"],
     maxLength: [255, "Password should be within 255 characters"],
   },
   createdAt: {
