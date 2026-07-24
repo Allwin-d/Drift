@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectToDb from "./Db/Db.js";
+import router from "./Routes/authRoutes/authRoutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.get("/", (req, res) => {
 });
 
 connectToDb();
+
+app.use("/api/auth", router);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
