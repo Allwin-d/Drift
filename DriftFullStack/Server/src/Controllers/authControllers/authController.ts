@@ -58,21 +58,25 @@ const login = async (req: Request, res: Response) => {
     ); //checks whether the user entered password and the password in the DB are same
     console.log("Valid Details : ", isPasswordMatch);
     if (!isPasswordMatch) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "Invalid Credentials",
       });
     }
 
     const SECRET_KEY = process.env.JWT_SECRET_KEY; //SECRET KEY
+    if (!SECRET_KEY) {
+      throw new Error("Secret Key not Found");
+    }
     const token = jwt.sign(
       //jwt.sign received 3 arguments , first arg receives payload , second received secret key and third receives expiration time
       {
+        id: user._id,
         name: user.name,
         email: user.email,
         createdAt: user.createdAt,
       },
-      SECRET_KEY ?? "",
+      SECRET_KEY,
       { expiresIn: "1hr" },
     );
     return res.status(200).json({
