@@ -64,7 +64,7 @@ const login = async (req: Request, res: Response) => {
       });
     }
 
-    const secret_key = process.env.JWT_SECRET_KEY; //SECRET KEY
+    const SECRET_KEY = process.env.JWT_SECRET_KEY; //SECRET KEY
     const token = jwt.sign(
       //jwt.sign received 3 arguments , first arg receives payload , second received secret key and third receives expiration time
       {
@@ -72,7 +72,7 @@ const login = async (req: Request, res: Response) => {
         email: user.email,
         createdAt: user.createdAt,
       },
-      secret_key ?? "",
+      SECRET_KEY ?? "",
       { expiresIn: "1hr" },
     );
     return res.status(200).json({
