@@ -29,7 +29,12 @@ const register = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       message: "User Registered Successfully",
-      data: UserData,
+      data: {
+        _id: UserData._id,
+        name: UserData.name,
+        email: UserData.email,
+        createdAt: UserData.createdAt,
+      },
     });
   } catch (err) {
     return res.status(500).json({
@@ -71,7 +76,7 @@ const login = async (req: Request, res: Response) => {
     const token = jwt.sign(
       //jwt.sign received 3 arguments , first arg receives payload , second received secret key and third receives expiration time
       {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         createdAt: user.createdAt,
@@ -82,6 +87,12 @@ const login = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "User LoggedIn Successfully",
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        createAt: user.createdAt,
+      },
       accessToken: token,
     });
   } catch (err) {
