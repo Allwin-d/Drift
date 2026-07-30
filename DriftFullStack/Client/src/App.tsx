@@ -4,12 +4,14 @@ import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 
 export const App = () => {
   const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster position="top-center" />
       <BrowserRouter>
         <Routes>
           <Route path="/register" element={<Register />}></Route>

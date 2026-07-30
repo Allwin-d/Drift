@@ -6,8 +6,19 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { LOGIN_API } from "../../url/url";
-import type { userDetailType } from "./login.types";
+import type { loginResponseType, userDetailType } from "./login.types";
 import toast from "react-hot-toast";
+import {
+  APP_DESC,
+  APP_INTRO,
+  CREATE_AN_ACCOUNT,
+  EMAIL,
+  LOGIN,
+  NEW_TO_DRIFT,
+  PASSWORD,
+  PICK_UP,
+  WELCOME_BACK,
+} from "../../constants/constantVariables";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,8 +45,11 @@ const Login = () => {
 
   const loginMutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: () => {
+    onSuccess: (data: loginResponseType) => {
       toast.success("Logged In Successfully");
+      console.log("User Data from Backend", data.data);
+      localStorage.setItem("token", data.accessToken);
+      navigate("/");
     },
     onError: () => {
       toast.error("Failed to Login ");
@@ -57,11 +71,10 @@ const Login = () => {
       <div className="bg-blue-950 w-full  items-center justify-evenly flex flex-col  ">
         <AppTitle />
         <h1 className="text-6xl text-yellow-50 font-bold w-3/6 leading-loose tracking-wider">
-          A journal that remembers where you were.
+          {APP_INTRO}
         </h1>
         <p className="w-2/4 text-3xl leading-relaxed text-gray-400 ">
-          Every entry is stamped with the place, the weather, the hour -so the
-          patterns in how you feel become something you can see
+          {APP_DESC}
         </p>
         <div className="flex flex-row space-x-2 ">
           <img src={postMarkStamp} />
@@ -76,13 +89,11 @@ const Login = () => {
       {/*Right side section */}
       <div className="bg-yellow-50 w-full flex items-center justify-center">
         <div className="flex flex-col space-y-10 w-6/12">
-          <h1 className="text-5xl font-bold">Welcome back</h1>
-          <p className="text-3xl text-gray-500">
-            Pick up where your last entry left{" "}
-          </p>
+          <h1 className="text-5xl font-bold">{WELCOME_BACK}</h1>
+          <p className="text-3xl text-gray-500">{PICK_UP}</p>
           <form className="flex flex-col space-y-8" onSubmit={handleSubmit}>
             <label className="text-3xl text-gray-500">
-              {upperCase("email")}
+              {upperCase(`${EMAIL}`)}
             </label>
             <input
               className="p-3 text-xl font-medium focus:border-none border-2 border-gray-300"
@@ -93,7 +104,7 @@ const Login = () => {
               onChange={handleChange}
             ></input>
             <label className="text-3xl text-gray-500">
-              {upperCase("password")}
+              {upperCase(`${PASSWORD}`)}
             </label>
             <input
               className="p-3 text-xl font-medium focus:border-none border-2 border-gray-300"
@@ -107,16 +118,16 @@ const Login = () => {
               className="p-3 bg-black text-white rounded-md font-bold tracking-widest hover:bg-slate-800"
               onClick={() => handleSubmit}
             >
-              Log in{" "}
+              {LOGIN}
             </button>
           </form>
           <p className="text-center text-2xl">
-            New to Drift ?{" "}
+            {NEW_TO_DRIFT}
             <span
-              className="text-gray-500 cursor-pointer"
+              className="text-gray-500 cursor-pointer ml-4"
               onClick={handleNavigate}
             >
-              Create an account
+              {CREATE_AN_ACCOUNT}
             </span>
           </p>
         </div>
