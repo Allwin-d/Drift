@@ -100,6 +100,7 @@ const Login = () => {
               type="email"
               name="email"
               placeholder="cristiano7@gmail.com"
+              autoComplete="email"
               value={userDetail.email}
               onChange={handleChange}
             ></input>
@@ -111,6 +112,7 @@ const Login = () => {
               type="password"
               name="passwordHash"
               placeholder="**********"
+              autoComplete="current-password"
               value={userDetail.passwordHash}
               onChange={handleChange}
             ></input>

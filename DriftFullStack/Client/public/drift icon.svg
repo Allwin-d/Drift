@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="featherGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA"></stop>
+      <stop offset="100%" stop-color="#1D4ED8"></stop>
+    </linearGradient>
+  </defs>
+
+  <path d="M48 10
+       C38 10, 24 18, 18 30
+       C12 42, 18 54, 30 54
+       C44 54, 52 40, 52 24
+       C52 18, 50 13, 48 10Z" fill="url(#featherGradient)"></path>
+
+  <path d="M20 48
+       L46 18" stroke="white" stroke-width="2.8" stroke-linecap="round"></path>
+
+  <path d="M26 42 L35 33
+       M30 48 L40 38
+       M32 28 L42 18
+       M22 36 L30 28" stroke="white" stroke-width="2" stroke-linecap="round"></path>
+</svg>
