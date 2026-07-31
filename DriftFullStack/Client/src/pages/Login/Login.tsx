@@ -4,7 +4,7 @@ import postMarkStamp from "../../assets/postmark-stamp.svg";
 import AppTitle from "../../components/AppTitle/AppTitle";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import api from "../../api/axios";
 import { LOGIN_API } from "../../url/url";
 import type { loginResponseType, userDetailType } from "./login.types";
 import toast from "react-hot-toast";
@@ -39,7 +39,7 @@ const Login = () => {
   console.log("User Details : ", userDetail);
 
   const loginUser = async (userDetail: userDetailType) => {
-    const response = await axios.post(LOGIN_API, userDetail);
+    const response = await api.post(LOGIN_API, userDetail);
     return response.data;
   };
 
