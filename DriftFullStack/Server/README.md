@@ -52,6 +52,9 @@
   - `timeOfDay`
   - `createdAt`
 
+  6) created -> createEntry 
+  middleware , routes and controller 
+
 400 Bad Request — invalid input data
 401 Unauthorized — missing/invalid token
 403 Forbidden — insufficient role

@@ -26,7 +26,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
     req.user = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({
+  return res.status(401).json({
       success: false,
       message: "Expired or Invalid Token",
     });
