@@ -9,11 +9,17 @@ export type userType = {
   createdAt: string;
 };
 
+export type filterObjType = {
+  userId: Types.ObjectId;
+  mood?: number;
+};
+
 export const createEntry = async (req: Request, res: Response) => {
   try {
     console.log("Request.user info :", req.user);
     const { _id } = req.user as userType;
     const { content, mood, lat, lng } = req.body;
+    console.log("Content details : ", content, mood, lat, lng);
 
     const userEntry = await Entry.create({
       userId: _id,
@@ -44,4 +50,39 @@ export const createEntry = async (req: Request, res: Response) => {
   }
 };
 
-export default { createEntry };
+export const getEntries = async (req: Request, res: Response) => {
+  try {
+    const { page, limit, mood } = req.query;
+    const user = req.user as userType;
+
+    const filterObj: filterObjType = {
+      userId: user._id,
+    };
+
+    if (mood) {
+      filterObj.mood = Number(mood);
+    }
+
+    const pageNum = page ? Number(page) : 1;
+    const limitNum = limit ? Number(limit) : 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const userEntries = await Entry.find(filterObj)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum);
+
+    return res.status(200).json({
+      success: true,
+      message: "User Entries fetched successfully",
+      data: userEntries,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+export default { createEntry, getEntries };
