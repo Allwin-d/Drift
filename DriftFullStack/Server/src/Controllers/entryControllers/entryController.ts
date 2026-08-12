@@ -1,18 +1,12 @@
 import type { Request, Response } from "express";
 import Entry from "../../Models/EntrySchema/Entry.js";
-import { Types } from "mongoose";
-
-export type userType = {
-  _id: Types.ObjectId;
-  name: string;
-  email: string;
-  createdAt: string;
-};
-
-export type filterObjType = {
-  userId: Types.ObjectId;
-  mood?: number;
-};
+import type {
+  filterObjType,
+  userType,
+  weatherResponseType,
+} from "./entryController.types.js";
+import getWeather from "../../Services/weather/weather.service.js";
+import type { getWeatherType } from "../../Services/weather/weather.types.js";
 
 export const createEntry = async (req: Request, res: Response) => {
   try {
@@ -21,12 +15,24 @@ export const createEntry = async (req: Request, res: Response) => {
     const { content, mood, lat, lng } = req.body;
     console.log("Content details : ", content, mood, lat, lng);
 
+    const weatherDataResponse: getWeatherType = await getWeather(lat, lng);
+    console.log("Weather Data Response : ", weatherDataResponse);
+
+    const tempC = weatherDataResponse?.main?.temp;
+    const condition = weatherDataResponse.weather[0]?.main;
+    const icon = weatherDataResponse.weather[0]?.icon;
+
     const userEntry = await Entry.create({
       userId: _id,
       content,
       mood,
       location: {
         coordinates: [lng, lat],
+      },
+      weather: {
+        tempC: tempC,
+        condition: condition ?? "",
+        icon: icon ?? "",
       },
     });
 
@@ -38,7 +44,12 @@ export const createEntry = async (req: Request, res: Response) => {
         content: userEntry.content,
         mood: userEntry.mood,
         location: {
-          coordinates: [userEntry.location?.coordinates],
+          coordinates: userEntry.location?.coordinates,
+        },
+        weather: {
+          tempC: userEntry.weather?.tempC,
+          condition: userEntry.weather?.condition,
+          icon: userEntry.weather?.icon,
         },
       },
     });
