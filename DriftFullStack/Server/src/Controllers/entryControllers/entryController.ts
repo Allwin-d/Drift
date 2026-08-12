@@ -1,10 +1,6 @@
 import type { Request, Response } from "express";
 import Entry from "../../Models/EntrySchema/Entry.js";
-import type {
-  filterObjType,
-  userType,
-  weatherResponseType,
-} from "./entryController.types.js";
+import type { filterObjType, userType } from "./entryController.types.js";
 import getWeather from "../../Services/weather/weather.service.js";
 import type { getWeatherType } from "../../Services/weather/weather.types.js";
 
