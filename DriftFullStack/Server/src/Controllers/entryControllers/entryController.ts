@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import Entry from "../../Models/EntrySchema/Entry.js";
 import type { filterObjType, userType } from "./entryController.types.js";
+import geoCoding from "../../Services/geoCoding/geoCoding.service.js";
 import getWeather from "../../Services/weather/weather.service.js";
-import type { getWeatherType } from "../../Services/weather/weather.types.js";
 
 export const createEntry = async (req: Request, res: Response) => {
   try {
@@ -11,8 +11,20 @@ export const createEntry = async (req: Request, res: Response) => {
     const { content, mood, lat, lng } = req.body;
     console.log("Content details : ", content, mood, lat, lng);
 
-    const weatherDataResponse: getWeatherType = await getWeather(lat, lng);
-    console.log("Weather Data Response : ", weatherDataResponse);
+    const [geoLocationDataResponse, weatherDataResponse] = await Promise.all([
+      geoCoding(lat, lng),
+      getWeather(lat, lng),
+    ]);
+
+    const state = geoLocationDataResponse.address.state;
+    const place =
+      geoLocationDataResponse.address.city ??
+      geoLocationDataResponse.address.town ??
+      geoLocationDataResponse.address.village ??
+      geoLocationDataResponse.address.county ??
+      "";
+
+    const placeName = `${place} , ${state}`;
 
     const tempC = weatherDataResponse?.main?.temp;
     const condition = weatherDataResponse.weather[0]?.main;
@@ -25,6 +37,7 @@ export const createEntry = async (req: Request, res: Response) => {
       location: {
         coordinates: [lng, lat],
       },
+      placeName: placeName,
       weather: {
         tempC: tempC,
         condition: condition ?? "",
@@ -42,6 +55,7 @@ export const createEntry = async (req: Request, res: Response) => {
         location: {
           coordinates: userEntry.location?.coordinates,
         },
+        placeName: userEntry.placeName,
         weather: {
           tempC: userEntry.weather?.tempC,
           condition: userEntry.weather?.condition,

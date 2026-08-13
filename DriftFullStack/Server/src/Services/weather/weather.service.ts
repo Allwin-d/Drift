@@ -12,8 +12,7 @@ const getWeather = async (lat: number, lng: number) => {
     }
     return weather;
   } catch (err) {
-    console.error("Failed to fetch weather Data : ", err);
-    throw err;
+    throw new Error("Failed to fetch Weather Data ");
   }
 };
 
