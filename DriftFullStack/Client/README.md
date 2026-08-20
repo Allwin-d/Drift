@@ -41,5 +41,5 @@
 * Integrated the following POST endpoint:
 
 ```typescript
-export const ADD_ENTRY_API = "/entries";
+export const ENTRY_API = "/entries";
 ```

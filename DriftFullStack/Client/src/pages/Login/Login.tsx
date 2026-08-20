@@ -68,7 +68,7 @@ const Login = () => {
   return (
     <div className="w-full h-screen flex flex-row">
       {/* Left Side section */}
-      <div className="bg-blue-950 w-full  items-center justify-evenly flex flex-col  ">
+      <div className="bg-[#020617] w-full  items-center justify-evenly flex flex-col  ">
         <AppTitle />
         <h1 className="text-6xl text-yellow-50 font-bold w-3/6 leading-loose tracking-wider">
           {APP_INTRO}
@@ -117,7 +117,7 @@ const Login = () => {
               onChange={handleChange}
             ></input>
             <button
-              className="p-3 bg-black text-white rounded-md font-bold tracking-widest hover:bg-slate-800"
+              className="p-3 bg-black text-white rounded-md font-bold tracking-widest transition-colors duration-700 hover:bg-slate-800"
               onClick={() => handleSubmit}
             >
               {LOGIN}

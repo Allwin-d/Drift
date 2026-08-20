@@ -10,7 +10,7 @@ import {
 import AppTitle from "./AppTitle/AppTitle";
 const Navbar = () => {
   return (
-    <div className="w-full h-20 bg-blue-950 flex flex-row justify-between items-center px-8 font-bold text-2xl text-gray-400">
+    <div className="w-full h-20 bg-blue-950 flex flex-row justify-between items-center px-8 font-bold text-2xl text-gray-400 py-4">
       {/* Left side section */}
       <div className="flex space-x-20 ">
         <AppTitle />
@@ -32,11 +32,11 @@ const Navbar = () => {
 
       {/* Right side section */}
       <div className="flex space-x-8">
-        <div className="flex space-x-2 text-yellow-500">
+        <div className="flex space-x-2 text-yellow-500 mt-2">
           <PiFireBold className="mt-1" />
           <p className="">{SEVEN_DAY_STREAK}</p>
         </div>
-        <button className="rounded-full border-2 px-3">{LOG_OUT}</button>
+        <button className="rounded-full border-2 px-6 py-2">{LOG_OUT}</button>
       </div>
     </div>
   );

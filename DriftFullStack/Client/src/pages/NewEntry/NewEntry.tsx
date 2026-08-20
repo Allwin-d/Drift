@@ -7,7 +7,7 @@ import { FaArrowRight } from "react-icons/fa";
 import type { entryDetailsType } from "./newEntry.types";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api/axios";
-import { ADD_ENTRY_API } from "../../url/url";
+import { ENTRY_API } from "../../url/url";
 import toast from "react-hot-toast";
 const NewEntry = () => {
   const [entryDetails, setEntryDetails] = useState<entryDetailsType>({
@@ -40,7 +40,7 @@ const NewEntry = () => {
   };
 
   const createEntry = async (entryData: entryDetailsType) => {
-    const response = await api.post(ADD_ENTRY_API, entryData);
+    const response = await api.post(ENTRY_API, entryData);
     return response.data;
   };
 
@@ -70,9 +70,9 @@ const NewEntry = () => {
   return (
     <div className="w-full min-h-screen">
       <Navbar />
-      <div className="flex flex-col items-center justify-center w-full min-h-screen  bg-blue-950">
+      <div className="flex flex-col items-center justify-center w-full min-h-screen bg-[#020617]">
         <div className="flex flex-col space-y-14 w-2/5 bg-yellow-50 ">
-          <div className="flex flex-row justify-between items-center bg-blue-950 p-4">
+          <div className="flex flex-row justify-between items-center bg-[#020617] p-4">
             <h1 className="text-5xl text-yellow-50 ">New Entry</h1>
             <MdClear className="cursor-pointer text-yellow-50" size={30} />
           </div>
