@@ -30,6 +30,9 @@ export const createEntry = async (req: Request, res: Response) => {
     const condition = weatherDataResponse.weather[0]?.main;
     const icon = weatherDataResponse.weather[0]?.icon;
 
+    const timeOfDay = weatherDataResponse.timezone;
+    console.log("Time Of the Day : ", timeOfDay);
+
     const userEntry = await Entry.create({
       userId: _id,
       content,

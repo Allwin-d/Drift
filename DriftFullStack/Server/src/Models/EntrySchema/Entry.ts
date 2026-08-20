@@ -36,7 +36,7 @@ export const entrySchema = new mongoose.Schema({
     icon: String,
   },
   timeOfDay: {
-    type: String,
+    type: String || Number,
     enum: Object.values(timeOfDay),
   },
   createdAt: {
