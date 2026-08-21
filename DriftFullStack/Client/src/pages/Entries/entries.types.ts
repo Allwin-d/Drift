@@ -15,6 +15,7 @@ export type entryDetailsType = {
   placeName: string;
   createdAt: string;
   __v: number;
+  timeOfDay : string
 };
 
 export type userEntriesType = {

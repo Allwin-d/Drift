@@ -6,6 +6,13 @@ import { ENTRY_API } from "../../url/url";
 import { FaLocationDot } from "react-icons/fa6";
 import { PiFeatherLight } from "react-icons/pi";
 import type { userEntriesType } from "./entries.types";
+import { entryColor } from "../../constants/constantObjects";
+import {
+  NEW_ENTRY,
+  SORTED_DESC,
+  TOTAL_ENTRIES,
+  YOUR_ENTRIES,
+} from "../../constants/constantVariables";
 
 const Entries = () => {
   const navigate = useNavigate();
@@ -18,14 +25,6 @@ const Entries = () => {
 
   const handleNavigate = () => {
     navigate("/entries/new");
-  };
-
-  const entryColor: Record<number, string> = {
-    1: "shadow-red-500",
-    2: "shadow-blue-500",
-    3: "shadow-green-500",
-    4: "shadow-purple-500",
-    5: "shadow-orange-500",
   };
 
   const fetchUserEntries = async () => {
@@ -52,26 +51,35 @@ const Entries = () => {
 
       {/* Entries section */}
       <div className="flex flex-col w-2/4 bg-[#020617]  p-4">
-        <div className="flex flex-row justify-between items-center w-full bg-[#020617] p-4">
+        <div className="flex flex-row justify-between items-center w-full bg-[#020617] ">
           <div className="flex flex-col space-y-4 ">
             <p className="text-2xl text-yellow-500">
               {date.toLocaleString("en-US", { weekday: "long" })} ,{" "}
               {date.getDate()} {date.toLocaleString("en-US", { month: "long" })}
             </p>
-            <h1 className="text-5xl font-bold text-yellow-50 ">Your entries</h1>
+            <h1 className="text-5xl font-bold text-yellow-50 ">
+              {YOUR_ENTRIES}
+            </h1>
           </div>
           <div className="relative">
             <button
               className="p-3 bg-yellow-500 text-black rounded-md font-bold tracking-widest transition-colors duration-700 hover:bg-yellow-400 px-8 text-xl"
               onClick={handleNavigate}
             >
-              New entry
+              {NEW_ENTRY}
             </button>
             <PiFeatherLight className="absolute text-black bottom-4 left-2" />
           </div>
         </div>
         {/* User Entries section */}
         <div className="flex flex-col space-y-8 mt-8">
+          <div className="flex flex-row justify-between items-center">
+            <h1 className="text-2xl text-yellow-50 ">
+              {TOTAL_ENTRIES} {data?.data.length}{" "}
+            </h1>
+            <p className="text-xl text-gray-300">{SORTED_DESC}</p>
+          </div>
+
           {data?.data.map((entry, id) => (
             <div
               className={`flex justify-between items-center bg-yellow-50 p-6 rounded-xl shadow-lg ${entryColor[id + 1]} transition duration-300 hover:scale-105 cursor-pointer `}
@@ -81,6 +89,7 @@ const Entries = () => {
                 <div className="flex flex-row space-x-2 text-gray-500 font-medium">
                   <FaLocationDot className="mt-1 text-red-600" />
                   <p className="tracking-wider">{entry.placeName}</p>
+                  <p className="tracking-wider">({entry.timeOfDay})</p>
                 </div>
 
                 <p className="font-bold text-xl tracking-wider">

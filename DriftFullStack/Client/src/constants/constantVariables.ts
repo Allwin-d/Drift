@@ -18,3 +18,15 @@ export const NEW_TO_DRIFT = "New to Drift ?";
 export const CREATE_AN_ACCOUNT = "Create an account";
 export const EMAIL = "Email";
 export const PASSWORD = "Password";
+
+//Entries
+export const YOUR_ENTRIES = "Your entries";
+export const NEW_ENTRY = "New entry";
+export const SORTED_DESC = "sorted : newest first";
+export const TOTAL_ENTRIES = "Total Entries : ";
+
+//NEW Entry
+export const CAPTURE_LOCATION_AND_WEATHER = "Capture location & weather";
+export const LONGITUDE = "Longitude";
+export const LATITUDE = "Latitude";
+export const SAVE_ENTRY="Save Entry";

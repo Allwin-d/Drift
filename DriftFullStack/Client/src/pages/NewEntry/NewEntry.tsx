@@ -9,6 +9,13 @@ import { useMutation } from "@tanstack/react-query";
 import api from "../../api/axios";
 import { ENTRY_API } from "../../url/url";
 import toast from "react-hot-toast";
+import {
+  CAPTURE_LOCATION_AND_WEATHER,
+  LATITUDE,
+  LONGITUDE,
+  NEW_ENTRY,
+  SAVE_ENTRY,
+} from "../../constants/constantVariables";
 const NewEntry = () => {
   const [entryDetails, setEntryDetails] = useState<entryDetailsType>({
     content: "",
@@ -73,7 +80,7 @@ const NewEntry = () => {
       <div className="flex flex-col items-center justify-center w-full min-h-screen bg-[#020617]">
         <div className="flex flex-col space-y-14 w-2/5 bg-yellow-50 ">
           <div className="flex flex-row justify-between items-center bg-[#020617] p-4">
-            <h1 className="text-5xl text-yellow-50 ">New Entry</h1>
+            <h1 className="text-5xl text-yellow-50 ">{NEW_ENTRY}</h1>
             <MdClear className="cursor-pointer text-yellow-50" size={30} />
           </div>
           <form
@@ -109,18 +116,24 @@ const NewEntry = () => {
             >
               <span className="relative">
                 <FaLocationArrow className="absolute right-72 top-1 " />
-                Capture location & weather
+                {CAPTURE_LOCATION_AND_WEATHER}
               </span>
             </button>
-            <p>Longitude{entryDetails.lng}</p>
-            <p>Latitude{entryDetails.lat}</p>
+            <p>
+              {LONGITUDE}
+              {entryDetails.lng}
+            </p>
+            <p>
+              {LATITUDE}
+              {entryDetails.lat}
+            </p>
             <button
               className="p-4 text-xl tracking-wider bg-black text-yellow-50 rounded-md"
               onClick={() => handleSubmit}
             >
               <span className="relative">
                 <FaArrowRight className="absolute left-28 top-1 " />
-                Save Entry
+                {SAVE_ENTRY}
               </span>
             </button>
           </form>
