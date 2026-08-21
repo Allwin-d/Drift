@@ -7,6 +7,7 @@ const getWeather = async (lat: number, lng: number) => {
   try {
     const response = await axios.get<getWeatherType>(WEATHER_DATA_API);
     const weather = response.data;
+    console.log("Weather Data Response : ", weather);
     if (!weather) {
       throw new Error("Weather data not availabe");
     }

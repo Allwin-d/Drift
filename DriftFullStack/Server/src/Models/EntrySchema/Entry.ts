@@ -1,5 +1,5 @@
 import mongoose, { Types } from "mongoose";
-import { timeOfDay } from "./entrySchema.types.js";
+import { sessionOfDayEnum } from "./entrySchema.types.js";
 
 export const entrySchema = new mongoose.Schema({
   userId: {
@@ -37,7 +37,7 @@ export const entrySchema = new mongoose.Schema({
   },
   timeOfDay: {
     type: String || Number,
-    enum: Object.values(timeOfDay),
+    enum: Object.values(sessionOfDayEnum),
   },
   createdAt: {
     type: Date,

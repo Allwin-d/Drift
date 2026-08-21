@@ -3,6 +3,8 @@ import Entry from "../../Models/EntrySchema/Entry.js";
 import type { filterObjType, userType } from "./entryController.types.js";
 import geoCoding from "../../Services/geoCoding/geoCoding.service.js";
 import getWeather from "../../Services/weather/weather.service.js";
+import { sessionRange } from "../../Utils/utilityFunctions.js";
+import type { sessionOfDayEnum } from "../../Models/EntrySchema/entrySchema.types.js";
 
 export const createEntry = async (req: Request, res: Response) => {
   try {
@@ -18,10 +20,10 @@ export const createEntry = async (req: Request, res: Response) => {
 
     const state = geoLocationDataResponse.address.state;
     const place =
+      geoLocationDataResponse.address.county ??
       geoLocationDataResponse.address.city ??
       geoLocationDataResponse.address.town ??
       geoLocationDataResponse.address.village ??
-      geoLocationDataResponse.address.county ??
       "";
 
     const placeName = `${place} , ${state}`;
@@ -30,8 +32,8 @@ export const createEntry = async (req: Request, res: Response) => {
     const condition = weatherDataResponse.weather[0]?.main;
     const icon = weatherDataResponse.weather[0]?.icon;
 
-    const timeOfDay = weatherDataResponse.timezone;
-    console.log("Time Of the Day : ", timeOfDay);
+    const hour = new Date().getHours();
+    const sessionOfDay: sessionOfDayEnum = sessionRange(hour);
 
     const userEntry = await Entry.create({
       userId: _id,
@@ -46,6 +48,7 @@ export const createEntry = async (req: Request, res: Response) => {
         condition: condition ?? "",
         icon: icon ?? "",
       },
+      timeOfDay: sessionOfDay,
     });
 
     return res.status(201).json({
@@ -64,6 +67,8 @@ export const createEntry = async (req: Request, res: Response) => {
           condition: userEntry.weather?.condition,
           icon: userEntry.weather?.icon,
         },
+        timeOfDay: userEntry.timeOfDay,
+        createdAt: userEntry.createdAt,
       },
     });
   } catch (err) {
