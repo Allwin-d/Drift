@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api/axios";
 import { LOGIN_API } from "../../url/url";
-import type { loginResponseType, userDetailType } from "./login.types";
+import type { loginResponseType, loginUserDetailType } from "./login.types";
 import toast from "react-hot-toast";
 import {
-  APP_DESC,
-  APP_INTRO,
   CREATE_AN_ACCOUNT,
   EMAIL,
   LOGIN,
+  LOGIN_DESC,
+  LOGIN_INTRO,
   NEW_TO_DRIFT,
   PASSWORD,
   PICK_UP,
@@ -23,7 +23,7 @@ import {
 const Login = () => {
   const navigate = useNavigate();
 
-  const [userDetail, setUserDetail] = useState<userDetailType>({
+  const [userDetail, setUserDetail] = useState<loginUserDetailType>({
     email: "",
     passwordHash: "",
   });
@@ -38,7 +38,7 @@ const Login = () => {
 
   console.log("User Details : ", userDetail);
 
-  const loginUser = async (userDetail: userDetailType) => {
+  const loginUser = async (userDetail: loginUserDetailType) => {
     const response = await api.post(LOGIN_API, userDetail);
     return response.data;
   };
@@ -47,7 +47,7 @@ const Login = () => {
     mutationFn: loginUser,
     onSuccess: (data: loginResponseType) => {
       toast.success("Logged In Successfully");
-      console.log("User Data from Backend", data.data);
+      console.log("Login Response Data : ", data.data);
       localStorage.setItem("token", data.accessToken);
       navigate("/");
     },
@@ -71,10 +71,10 @@ const Login = () => {
       <div className="bg-[#020617] w-full  items-center justify-evenly flex flex-col  ">
         <AppTitle />
         <h1 className="text-6xl text-yellow-50 font-bold w-3/6 leading-loose tracking-wider">
-          {APP_INTRO}
+          {LOGIN_INTRO}
         </h1>
         <p className="w-2/4 text-3xl leading-relaxed text-gray-400 ">
-          {APP_DESC}
+          {LOGIN_DESC}
         </p>
         <div className="flex flex-row space-x-2 ">
           <img src={postMarkStamp} />
