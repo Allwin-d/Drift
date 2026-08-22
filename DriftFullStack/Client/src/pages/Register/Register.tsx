@@ -56,7 +56,7 @@ const Register = () => {
     onSuccess: (data: registerResponseType) => {
       toast.success("Registered Successfully");
       console.log("Register response data :", data.data);
-      navigate("/login");
+      navigate("/");
     },
     onError: () => {
       toast.error("Failed to Login ");
@@ -69,7 +69,7 @@ const Register = () => {
   };
 
   const handleNavigate = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   return (

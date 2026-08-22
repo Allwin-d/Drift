@@ -46,10 +46,10 @@ const Login = () => {
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data: loginResponseType) => {
+      localStorage.setItem("token", data.accessToken);
       toast.success("Logged In Successfully");
       console.log("Login Response Data : ", data.data);
-      localStorage.setItem("token", data.accessToken);
-      navigate("/");
+      navigate("/entries");
     },
     onError: () => {
       toast.error("Failed to Login ");
