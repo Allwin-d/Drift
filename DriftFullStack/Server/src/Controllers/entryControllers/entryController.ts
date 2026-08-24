@@ -114,4 +114,31 @@ export const getEntries = async (req: Request, res: Response) => {
   }
 };
 
-export default { createEntry, getEntries };
+export const deleteEntry = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const idExist = await Entry.find({ id });
+
+    if (!idExist) {
+      res.send(404).json({
+        success: false,
+        message: `ID: ${id} doesn't Exist`,
+      });
+    } else {
+      const deletedEntry = await Entry.findByIdAndDelete(id);
+      return res.status(200).json({
+        success: true,
+        message: `ID :${id} deleted successfully`,
+        data: deletedEntry,
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+export default { createEntry, getEntries, deleteEntry };
