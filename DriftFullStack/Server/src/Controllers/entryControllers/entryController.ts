@@ -116,22 +116,30 @@ export const getEntries = async (req: Request, res: Response) => {
 
 export const deleteEntry = async (req: Request, res: Response) => {
   try {
+    const currentUser = req.user as userType;
     const { id } = req.params;
 
-    const idExist = await Entry.find({ id });
+    const isEntryExist = await Entry.findById(id);
 
-    if (!idExist) {
-      res.send(404).json({
+    if (!isEntryExist) {
+      return res.status(404).json({
         success: false,
-        message: `ID: ${id} doesn't Exist`,
+        message: `Entry not found`,
       });
     } else {
-      const deletedEntry = await Entry.findByIdAndDelete(id);
-      return res.status(200).json({
-        success: true,
-        message: `ID :${id} deleted successfully`,
-        data: deletedEntry,
-      });
+      if (isEntryExist.userId?.toString() !== currentUser._id.toString()) {
+        return res.status(403).json({
+          status: false,
+          message: "Forbidden not your entry",
+        });
+      } else {
+        const deletedEntry = await Entry.findByIdAndDelete(id);
+        return res.status(200).json({
+          success: true,
+          message: `ID : ${id} is deleted successfully`,
+          data: deletedEntry,
+        });
+      }
     }
   } catch (err) {
     return res.status(500).json({
