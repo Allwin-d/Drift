@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import Entries from "./pages/Entries/Entries";
 import NewEntry from "./pages/NewEntry/NewEntry";
+import EntryDetail from "./pages/EntryDetail/EntryDetail";
 
 export const App = () => {
   const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ export const App = () => {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/" element={<Login />}></Route>
           <Route path="/entries" element={<Entries />}></Route>
+          <Route path="/entryDetail/:id" element={<EntryDetail />}></Route>
           <Route path="/entries/new" element={<NewEntry />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
         </Routes>

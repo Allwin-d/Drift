@@ -175,6 +175,7 @@ const Entries = () => {
               <div
                 className={`flex justify-between items-center bg-yellow-50 p-6 rounded-xl shadow-lg ${entryColor[id + 1]} transition duration-300 hover:scale-105 cursor-pointer `}
                 key={id}
+                onClick={() => navigate(`/entryDetail/${entry._id}`)}
               >
                 <div className="flex flex-col justify-between h-24 ">
                   <div className="flex flex-row space-x-2 text-gray-500 font-medium">
