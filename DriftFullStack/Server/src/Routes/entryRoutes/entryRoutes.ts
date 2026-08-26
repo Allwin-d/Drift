@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.get("/", verifyToken, getEntries);
 router.post("/", verifyToken, createEntry);
-router.delete("/:id",deleteEntry);
+router.delete("/:id", verifyToken, deleteEntry);
 
 export default router;

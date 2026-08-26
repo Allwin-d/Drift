@@ -114,12 +114,46 @@ export const getEntries = async (req: Request, res: Response) => {
   }
 };
 
+export const getSingleEntry = async (req: Request, res: Response) => {
+  try {
+    const currentUser = req.user as userType;
+    const { id } = req.params;
+
+    const singleEntry = await Entry.findById(id); //this will give a single document that matches an ID
+
+    if (!singleEntry) {
+      return res.status(404).json({
+        success: false,
+        message: `Entry not found`,
+      });
+    } else {
+      if (singleEntry.userId?.toString() !== currentUser._id.toString()) {
+        return res.status(403).json({
+          status: false,
+          message: "Forbidden not your entry",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `ID : ${id} is fetched successfully`,
+          data: singleEntry,
+        });
+      }
+    }
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
 export const deleteEntry = async (req: Request, res: Response) => {
   try {
     const currentUser = req.user as userType;
     const { id } = req.params;
 
-    const isEntryExist = await Entry.findById(id);
+    const isEntryExist = await Entry.findById(id); //this will give a single document that matches an ID
 
     if (!isEntryExist) {
       return res.status(404).json({
@@ -149,4 +183,4 @@ export const deleteEntry = async (req: Request, res: Response) => {
   }
 };
 
-export default { createEntry, getEntries, deleteEntry };
+export default { createEntry, getEntries, getSingleEntry, deleteEntry };
