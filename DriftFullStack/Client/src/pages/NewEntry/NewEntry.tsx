@@ -16,7 +16,10 @@ import {
   NEW_ENTRY,
   SAVE_ENTRY,
 } from "../../constants/constantVariables";
+import { useNavigate } from "react-router-dom";
 const NewEntry = () => {
+  const navigate = useNavigate();
+
   const [entryDetails, setEntryDetails] = useState<entryDetailsType>({
     content: "",
     mood: 0,
@@ -55,6 +58,7 @@ const NewEntry = () => {
     mutationFn: createEntry,
     onSuccess: () => {
       toast.success("Entry Added Successfully");
+      navigate("/entries");
     },
     onError: () => {
       toast.error("Failed to Add Enty");
