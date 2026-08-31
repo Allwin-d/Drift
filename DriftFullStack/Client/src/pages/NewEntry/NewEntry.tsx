@@ -27,6 +27,9 @@ const NewEntry = () => {
     lat: 0,
   });
 
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [isLocationCaptured, setIsLocationCaptured] = useState(false);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -38,14 +41,28 @@ const NewEntry = () => {
   };
 
   const handleLocation = () => {
+    setLocationLoading(true);
+    setIsLocationCaptured(false);
+
     navigator.geolocation.getCurrentPosition(
-      (position) =>
+      (position) => {
         setEntryDetails((prev) => ({
           ...prev,
           lng: position.coords.longitude,
           lat: position.coords.latitude,
-        })),
-      (error) => console.error("Failed to get the current location : ", error),
+        }));
+
+        setLocationLoading(false);
+        setIsLocationCaptured(true);
+      },
+      (error) => {
+        console.error("Failed to get the current location : ", error);
+
+        setLocationLoading(false);
+        setIsLocationCaptured(false);
+
+        toast.error("Failed to get your location");
+      },
     );
   };
 
@@ -82,13 +99,17 @@ const NewEntry = () => {
     <div className="w-full min-h-screen">
       <Navbar />
       <div className="flex flex-col items-center justify-center w-full min-h-screen bg-[#020617]">
-        <div className="flex flex-col space-y-14 w-2/5 bg-yellow-50 ">
+        <div className="flex flex-col space-y-4 w-2/6 bg-yellow-50">
           <div className="flex flex-row justify-between items-center bg-[#020617] p-4">
-            <h1 className="text-5xl text-yellow-50 ">{NEW_ENTRY}</h1>
-            <MdClear className="cursor-pointer text-yellow-50" size={30} />
+            <h1 className="text-3xl text-yellow-50 ">{NEW_ENTRY}</h1>
+            <MdClear
+              className="cursor-pointer text-yellow-50"
+              size={30}
+              onClick={() => navigate("/entries")}
+            />
           </div>
           <form
-            className="p-10 flex flex-col space-y-12"
+            className="p-10 flex flex-col space-y-4"
             onSubmit={handleSubmit}
           >
             <textarea
@@ -115,22 +136,32 @@ const NewEntry = () => {
             />
             <button
               type="button"
-              className="border-4 border-dashed p-4 text-xl tracking-wider "
+              className="border-4 border-dashed p-4 text-xl tracking-wider"
               onClick={handleLocation}
+              disabled={locationLoading}
             >
-              <span className="relative">
-                <FaLocationArrow className="absolute right-72 top-1 " />
-                {CAPTURE_LOCATION_AND_WEATHER}
-              </span>
+              {locationLoading ? (
+                <div className="flex items-center justify-center gap-3">
+                  <div className="w-5 h-5 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+                  <span>Fetching Location...</span>
+                </div>
+              ) : isLocationCaptured ? (
+                <div className="flex flex-col">
+                  <h1>Location Captured Successfully</h1>
+                  <p>
+                    {LONGITUDE}: {entryDetails.lng}
+                  </p>
+                  <p>
+                    {LATITUDE}: {entryDetails.lat}
+                  </p>
+                </div>
+              ) : (
+                <div className="relative">
+                  <FaLocationArrow className="absolute left-36 top-1" />
+                  {CAPTURE_LOCATION_AND_WEATHER}
+                </div>
+              )}
             </button>
-            <p>
-              {LONGITUDE}
-              {entryDetails.lng}
-            </p>
-            <p>
-              {LATITUDE}
-              {entryDetails.lat}
-            </p>
             <button
               className="p-4 text-xl tracking-wider bg-black text-yellow-50 rounded-md"
               onClick={() => handleSubmit}

@@ -8,14 +8,20 @@ import {
   SEVEN_DAY_STREAK,
 } from "../constants/constantVariables";
 import AppTitle from "./AppTitle/AppTitle";
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full h-20 bg-blue-950 flex flex-row justify-between items-center px-8 font-bold text-2xl text-gray-400 py-4">
       {/* Left side section */}
       <div className="flex space-x-20 ">
-        <AppTitle />
+        <AppTitle/>
         <div className="flex space-x-8">
-          <p className="cursor-pointer hover:text-yellow-500 hover:underline hover:underline-offset-8 hover:transition duration-300">
+          <p
+            className="cursor-pointer hover:text-yellow-500 hover:underline hover:underline-offset-8 hover:transition duration-300"
+            onClick={() => navigate("/entries")}
+          >
             {ENTRIES}
           </p>
           <p className="cursor-pointer hover:text-yellow-500 hover:underline hover:underline-offset-8 hover:transition duration-300">
