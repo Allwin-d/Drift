@@ -146,7 +146,7 @@ const NewEntry = () => {
                   <span>Fetching Location...</span>
                 </div>
               ) : isLocationCaptured ? (
-                <div className="flex flex-col">
+                <div className="flex flex-col text-sm">
                   <h1>Location Captured Successfully</h1>
                   <p>
                     {LONGITUDE}: {entryDetails.lng}

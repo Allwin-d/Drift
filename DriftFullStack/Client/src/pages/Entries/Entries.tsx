@@ -145,7 +145,7 @@ const Entries = () => {
               {date.toLocaleString("en-US", { weekday: "long" })} ,{" "}
               {date.getDate()} {date.toLocaleString("en-US", { month: "long" })}
             </p>
-            <h1 className="text-5xl font-bold text-yellow-50 ">
+            <h1 className="text-3xl font-bold text-yellow-50 ">
               {YOUR_ENTRIES}
             </h1>
           </div>
