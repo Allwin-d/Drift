@@ -5,6 +5,7 @@ import geoCoding from "../../Services/geoCoding/geoCoding.service.js";
 import getWeather from "../../Services/weather/weather.service.js";
 import { sessionRange } from "../../Utils/utilityFunctions.js";
 import type { sessionOfDayEnum } from "../../Models/EntrySchema/entrySchema.types.js";
+import { createEntryValidation } from "../../Validations/entryValidation.js";
 
 export const createEntry = async (req: Request, res: Response) => {
   try {
@@ -12,6 +13,14 @@ export const createEntry = async (req: Request, res: Response) => {
     const { _id } = req.user as userType;
     const { content, mood, lat, lng } = req.body;
     console.log("Content details : ", content, mood, lat, lng);
+    const result = createEntryValidation.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        message: "Invalid request payload",
+        errors: result.error.issues,
+      });
+    }
 
     const [geoLocationDataResponse, weatherDataResponse] = await Promise.all([
       geoCoding(lat, lng),
