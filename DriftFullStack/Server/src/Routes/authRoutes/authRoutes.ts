@@ -3,12 +3,12 @@ import {
   login,
   register,
 } from "../../Controllers/authControllers/authController.js";
-import errorHandler from "../../Middleware/errorHandler.middleware.js";
+import rateLimiter from "../../Middleware/rateLimiter.middleware.js";
 
 const router = express.Router();
 
 //authRoutes
 router.post("/register", register);
-router.post("/login", login);
+router.post("/login", rateLimiter, login);
 
 export default router;
