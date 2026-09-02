@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectToDb from "./Db/Db.js";
 import authRoutes from "./Routes/authRoutes/authRoutes.js";
 import entryRoutes from "./Routes/entryRoutes/entryRoutes.js";
+import errorHandler from "./Middleware/errorHandler.middleware.js";
 
 dotenv.config();
 
@@ -31,6 +32,9 @@ app.use("/api/auth", authRoutes);
 
 //Entry Routes
 app.use("/api/entries", entryRoutes);
+
+//error handler
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

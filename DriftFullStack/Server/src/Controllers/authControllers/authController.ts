@@ -1,9 +1,9 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import User from "../../Models/UserModel/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const register = async (req: Request, res: Response) => {
+const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, email, passwordHash } = req.body;
     console.log("User Details for Register : ", req.body);
@@ -36,15 +36,12 @@ const register = async (req: Request, res: Response) => {
         createdAt: UserData.createdAt,
       },
     });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went Wrong",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, passwordHash } = req.body;
     const user = await User.findOne({ email }); //finding whether the email actually exist or not...
@@ -95,11 +92,8 @@ const login = async (req: Request, res: Response) => {
       },
       accessToken: token,
     });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 

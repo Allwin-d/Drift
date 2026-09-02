@@ -16,6 +16,4 @@ router.post("/", verifyToken, createEntry);
 router.delete("/:id", verifyToken, deleteEntry);
 router.get("/:id", verifyToken, getSingleEntry);
 
-app.use(errorHandler);
-
 export default router;

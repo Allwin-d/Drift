@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import Entry from "../../Models/EntrySchema/Entry.js";
 import type { filterObjType, userType } from "./entryController.types.js";
 import geoCoding from "../../Services/geoCoding/geoCoding.service.js";
@@ -7,7 +7,11 @@ import { sessionRange } from "../../Utils/utilityFunctions.js";
 import type { sessionOfDayEnum } from "../../Models/EntrySchema/entrySchema.types.js";
 import { createEntryValidation } from "../../Validations/entryValidation.js";
 
-export const createEntry = async (req: Request, res: Response) => {
+export const createEntry = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     console.log("Request.user info :", req.user);
     const { _id } = req.user as userType;
@@ -80,15 +84,16 @@ export const createEntry = async (req: Request, res: Response) => {
         createdAt: userEntry.createdAt,
       },
     });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went Wrong",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const getEntries = async (req: Request, res: Response) => {
+export const getEntries = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { page, limit, mood } = req.query;
     const user = req.user as userType;
@@ -115,15 +120,16 @@ export const getEntries = async (req: Request, res: Response) => {
       message: "User Entries fetched successfully",
       data: userEntries,
     });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const getSingleEntry = async (req: Request, res: Response) => {
+export const getSingleEntry = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const currentUser = req.user as userType;
     const { id } = req.params;
@@ -149,15 +155,16 @@ export const getSingleEntry = async (req: Request, res: Response) => {
         });
       }
     }
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const deleteEntry = async (req: Request, res: Response) => {
+export const deleteEntry = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const currentUser = req.user as userType;
     const { id } = req.params;
@@ -184,11 +191,8 @@ export const deleteEntry = async (req: Request, res: Response) => {
         });
       }
     }
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
