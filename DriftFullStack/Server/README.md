@@ -1,210 +1,193 @@
-# Backend Progress
+# Drift Server
 
-## 1. Server Setup
+This is the backend API for Drift, the personal journaling application that connects user entries to place, time, weather, and emotional context. The server handles authentication, journal entry creation, weather/geolocation enrichment, and secure data persistence with MongoDB.
 
-- Configured the Express server in `server.ts`.
-- Initialized the application using Express.
-- Started the server on **Port 6969**.
+The backend is built with Node.js, Express, TypeScript, and Mongoose, and exposes REST endpoints for the frontend client.
 
-## 2. Database Configuration
+## Overview
 
-- Created a `DB` folder.
-- Added a `db.ts` file to manage the MongoDB database connection.
-- Configured the database connection using MongoDB credentials.
+Drift is designed around a core idea: every journal entry should be more than plain text. The backend captures and stores context such as:
+- user identity
+- journal content
+- mood score
+- geolocation coordinates
+- readable place name
+- weather details
+- time-of-day classification
+- creation time
 
-## 3. User Schema
+This makes later features like entry analysis, map views, and personal insights possible.
 
-- Created the `User` schema inside the `Model` folder.
-- The schema includes the following fields:
-  - `name`
-  - `email`
-  - `password`
-  - `createdAt`
+## Main Backend Features
 
-### Validation
+### 1. User Authentication
+- User registration with hashed password storage
+- Login with email/password validation
+- JWT token generation on successful login
+- Protected routes using an authorization middleware
+- Error handling for invalid, expired, or missing tokens
 
-- `name`, `email`, and `password` are required.
-- `email` is unique to prevent duplicate user registrations.
+### 2. Journal Entry Management
+- Create entries for authenticated users
+- Fetch all entries for a user
+- Fetch a single entry by ID
+- Delete entries with ownership validation
+- Filter entries by mood and paginate results
 
-## 4. Authentication
+### 3. Geolocation + Reverse Geocoding
+- Accepts latitude and longitude from the client
+- Uses Nominatim/OpenStreetMap reverse geocoding to determine place information
+- Builds a readable `placeName` such as `City, State`
 
-### Register
+### 4. Weather Integration
+- Calls the OpenWeather API based on user location
+- Stores weather information like:
+  - temperature
+  - weather condition
+  - weather icon
+- Helps connect mood and journaling to real-world environmental context
 
-- Implemented user registration functionality.
-- Passwords are securely hashed using **bcrypt** before being stored in the database.
+### 5. Time-of-Day Classification
+- Determines the session of the day based on the current hour
+- Stores a `timeOfDay` value in the entry
+- Supports later pattern analysis (for example: morning reflections vs evening journaling)
 
-### Login
+### 6. Data Validation and Security
+- Input validation using Zod schemas
+- Protected API routes with JWT verification
+- Rate limiting on login requests
+- CORS enabled for the frontend origin
+- Ownership checks before deleting or accessing another user’s entry
 
-- Implemented user login functionality.
-- Verified user credentials using **bcrypt**.
-- Generated a JWT (JSON Web Token) upon successful authentication.
-- Returned the JWT in the response for client-side authentication.
+## API Structure
 
-## 5. Entry Schema
+### Auth Routes
+Base path: `/api/auth`
 
-- Created the `Entry` schema to store journal entries.
-- The schema includes the following fields:
-  - `userId`
-  - `content`
-  - `mood`
-  - `location`
-  - `placeName`
-  - `weather`
-  - `timeOfDay`
-  - `createdAt`
+- `POST /api/auth/register` — register a new user
+- `POST /api/auth/login` — login and receive JWT token
 
-## 6. External Services
+### Entry Routes
+Base path: `/api/entries`
 
-### 6.1 Geocoding Service
+- `GET /api/entries` — fetch user entries
+- `POST /api/entries` — create a new journal entry
+- `GET /api/entries/:id` — fetch a single entry
+- `DELETE /api/entries/:id` — delete an entry
 
-- Created a reusable `geoCoding` service to retrieve location information from latitude and longitude.
-- Integrated the **Nominatim OpenStreetMap Reverse Geocoding API**.
-- Used Axios to make the API request.
-- Passed the following parameters:
-  - `lat` — Latitude
-  - `lon` — Longitude
-  - `format=json` — Returns the response in JSON format.
+## Server Architecture
 
-- Added a custom `User-Agent` header as required by the Nominatim service.
-- Defined a TypeScript type (`geoCodingType`) for the API response.
-- Added error handling for unavailable or failed geocoding requests.
-
-### 6.2 Weather Service
-
-- Created a reusable `getWeather` service to retrieve weather information based on latitude and longitude.
-- Integrated the **OpenWeather API**.
-- Used Axios to make the API request.
-- Retrieved the API key from the environment variables using:
-
-```typescript
-process.env.OPEANWEATHER_API_KEY;
+```bash
+Server/
+├─ README.md
+├─ package.json
+├─ tsconfig.json
+├─ src/
+│  ├─ Config/
+│  ├─ Controllers/
+│  │  ├─ authControllers/
+│  │  └─ entryControllers/
+│  ├─ Db/
+│  ├─ Middleware/
+│  │  ├─ auth.middleware.ts
+│  │  ├─ errorHandler.middleware.ts
+│  │  └─ rateLimiter.middleware.ts
+│  ├─ Models/
+│  │  ├─ UserModel/
+│  │  └─ EntrySchema/
+│  ├─ Routes/
+│  │  ├─ authRoutes/
+│  │  └─ entryRoutes/
+│  ├─ Services/
+│  │  ├─ geoCoding/
+│  │  └─ weather/
+│  ├─ Types/
+│  ├─ Utils/
+│  ├─ Validations/
+│  ├─ server.ts
+│  └─ ...
 ```
 
-- Configured the API to return temperature values in **Celsius** using `units=metric`.
-- Defined a TypeScript type (`getWeatherType`) for the API response.
-- Added error handling for unavailable or failed weather requests.
+## Database Design
 
-## 7. Create Entry API
+### User Model
+Stores:
+- `name`
+- `email`
+- `passwordHash`
+- `createdAt`
 
-- Implemented the `createEntry` controller.
-- Added the required **middleware, route, and controller** for creating journal entries.
-- Extracted the authenticated user's ID from `req.user`.
-- Accepted the following data from the request body:
-  - `content`
-  - `mood`
-  - `lat`
-  - `lng`
+### Entry Model
+Stores:
+- `userId`
+- `content`
+- `mood`
+- `location`
+- `placeName`
+- `weather`
+- `timeOfDay`
+- `createdAt`
 
-### Geolocation and Weather Integration
+The entry is linked to a specific user so each user can only access their own journal records.
 
-- Integrated the **Geocoding Service** to convert latitude and longitude into readable location information.
-- Integrated the **Weather Service** to retrieve current weather information based on the user's coordinates.
-- Used `Promise.all()` to call both services concurrently:
+## External Services Used
 
-```typescript
-const [geoLocationDataResponse, weatherDataResponse] = await Promise.all([
-  geoCoding(lat, lng),
-  getWeather(lat, lng),
-]);
+### OpenStreetMap / Nominatim
+Used for reverse geocoding:
+- converts latitude/longitude into readable regional information
+- helps identify locality and state
+
+### OpenWeather API
+Used for live weather data:
+- temperature in Celsius
+- condition name
+- icon code
+
+## Security and Reliability
+
+The backend includes the following protections and quality checks:
+- hashed passwords using bcrypt
+- JWT-based authorization
+- request validation with Zod
+- token verification middleware
+- rate limiting on login route
+- ownership checks for sensitive actions
+- structured error responses
+
+## Environment Variables
+
+The server depends on environment variables such as:
+
+```bash
+PORT=6969
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET_KEY=your_jwt_secret
+OPEANWEATHER_API_KEY=your_weather_api_key
 ```
 
-- Extracted the state from the geocoding response.
-- Extracted the most relevant place using the following fallback order:
-  1. City
-  2. Town
-  3. Village
-  4. County
+## Local Development
 
-- Combined the place and state to generate a readable `placeName`.
+From the `Server` folder:
 
-### Weather Information
-
-The following weather details are extracted and stored with each journal entry:
-
-- Temperature in Celsius (`tempC`)
-- Weather condition (`condition`)
-- Weather icon (`icon`)
-
-### Entry Creation
-
-- Stored the journal entry in MongoDB using the `Entry` model.
-- Stored the user's location as coordinates in `[longitude, latitude]` format.
-- Associated each entry with the authenticated user's `userId`.
-- Returned the created entry details with a **201 Created** response.
-
-## 8. Get Entries API
-
-- Implemented the `getEntries` controller to retrieve journal entries belonging to the authenticated user.
-- Automatically filters entries using the user's ID from `req.user`.
-- Added optional filtering by `mood`.
-- Implemented pagination using:
-  - `page`
-  - `limit`
-  - `skip`
-
-- Default pagination values:
-  - `page = 1`
-  - `limit = 10`
-
-- Sorted entries by `createdAt` in descending order so the latest entries are returned first.
-- Added support for retrieving entries based on a specific mood.
-
-### Query Parameters
-
-```text
-GET /entries?page=1&limit=10&mood=5
+```bash
+npm install
+npm run dev
 ```
 
-- `page` — Specifies the page number.
-- `limit` — Specifies the number of entries per page.
-- `mood` — Optional filter to retrieve entries with a specific mood.
+The server starts on:
 
-## 9. Delete Entry API
+```bash
+http://localhost:6969
+```
 
-- Implemented the deleteEntry controller to delete a specific journal entry.
-- Extracted the authenticated user's ID from req.user.
-- Retrieved the entry using its MongoDB \_id with findById().
-- Verified that the requested entry exists before attempting deletion.
-- Added ownership validation to ensure that users can only delete their own entries.
-- Returned appropriate HTTP status codes:
-- 200 OK — Entry deleted successfully.
-- 403 Forbidden — User attempted to delete another user's entry.
-- 404 Not Found — Entry with the specified ID does not exist.
-- 500 Internal Server Error — Unexpected server-side error.
-- Deleted the entry using findByIdAndDelete().
-- Returned the deleted entry along with a success message.
+## Production Build
 
-API Endpoint
-DELETE /entries/:id
+```bash
+npm run build
+```
 
-Successful Response
-{
-"success": true,
-"message": "ID : <entry_id> is deleted successfully",
-"data": {
-// deleted entry
-}
-}
+## Notes
 
-## 10. Error Handling
+This backend is the foundation for Drift’s “memory map” concept: journal entries are stored with context, not just text. That allows the frontend and future analytics features to reconstruct user behavior across locations, weather conditions, and time-of-day patterns.
 
-Implemented basic HTTP status code handling for API responses:
-
-- **400 Bad Request** — Invalid input data.
-- **401 Unauthorized** — Missing or invalid authentication token.
-- **403 Forbidden** — Insufficient permissions or role.
-- **404 Not Found** — Requested resource does not exist.
-- **500 Internal Server Error** — Unexpected server-side error.
-
-## 11. Technologies and Services Used
-
-- **Node.js** — Backend runtime.
-- **Express.js** — REST API framework.
-- **TypeScript** — Type safety and development.
-- **MongoDB** — Database.
-- **Mongoose** — MongoDB ODM.
-- **Axios** — HTTP client for external API requests.
-- **JWT** — User authentication.
-- **bcrypt** — Password hashing and verification.
-- **Nominatim / OpenStreetMap** — Reverse geocoding.
-- **OpenWeather API** — Weather data.
+The current server is focused on the MVP flow: authentication, secure journal entry storage, weather/geolocation enrichment, and protected access to each user’s data.
