@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import Entries from "./pages/Entries/Entries";
 import NewEntry from "./pages/NewEntry/NewEntry";
 import EntryDetail from "./pages/EntryDetail/EntryDetail";
+import Map from "./pages/Map/Map";
 
 export const App = () => {
   const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ export const App = () => {
           <Route path="/entryDetail/:id" element={<EntryDetail />}></Route>
           <Route path="/entries/new" element={<NewEntry />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/map" element={<Map />}></Route>
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
