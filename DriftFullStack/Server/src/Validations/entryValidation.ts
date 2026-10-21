@@ -1,28 +1,10 @@
 import { z } from "zod";
-import { sessionOfDayEnum } from "../Models/EntrySchema/entrySchema.types.js";
 
 export const createEntryValidation = z.object({
   content: z.string().trim().min(1, "Content is required"),
 
-  mood: z.number().int().min(1).max(5),
+  mood: z.coerce.number().int().min(1).max(5),
 
-  location: z.object({
-    type: z.literal("Point"),
-
-    coordinates: z
-      .array(z.number())
-      .length(2, "Coordinates must contain longitude and latitude"),
-  }),
-
-  placeName: z.string().optional(),
-
-  weather: z
-    .object({
-      tempC: z.number().optional(),
-      condition: z.string().optional(),
-      icon: z.string().optional(),
-    })
-    .optional(),
-
-  timeOfDay: z.enum(Object.values(sessionOfDayEnum) as [string, ...string[]]),
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
 });
