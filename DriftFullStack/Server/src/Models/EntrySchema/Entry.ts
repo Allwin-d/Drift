@@ -1,9 +1,11 @@
 import mongoose, { Types } from "mongoose";
 import { sessionOfDayEnum } from "./entrySchema.types.js";
+import { required } from "zod/mini";
 
 export const entrySchema = new mongoose.Schema({
   userId: {
     type: Types.ObjectId,
+    required: [true, "User Id Required"],
     ref: "User",
   },
   content: {
@@ -36,7 +38,7 @@ export const entrySchema = new mongoose.Schema({
     icon: String,
   },
   timeOfDay: {
-    type: String || Number,
+    type: String,
     enum: Object.values(sessionOfDayEnum),
   },
   createdAt: {
@@ -44,6 +46,8 @@ export const entrySchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+entrySchema.index({ location: "2dsphere" });
 
 const Entry = mongoose.model("Entry", entrySchema);
 export default Entry;

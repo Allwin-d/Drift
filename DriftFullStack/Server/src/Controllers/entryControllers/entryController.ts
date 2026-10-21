@@ -6,6 +6,7 @@ import getWeather from "../../Services/weather/weather.service.js";
 import { sessionRange } from "../../Utils/utilityFunctions.js";
 import type { sessionOfDayEnum } from "../../Models/EntrySchema/entrySchema.types.js";
 import { createEntryValidation } from "../../Validations/entryValidation.js";
+import { Types } from "mongoose";
 
 export const createEntry = async (
   req: Request,
@@ -196,4 +197,68 @@ export const deleteEntry = async (
   }
 };
 
-export default { createEntry, getEntries, getSingleEntry, deleteEntry };
+export const getEntriesNearby = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { _id } = req.user as userType;
+    const { lat, lng, radius } = req.query;
+    if (!lat || !lng) {
+      return res.status(400).json({
+        success: false,
+        message: "Either Lat or Lng is missing",
+      });
+    }
+
+    if (
+      !(
+        Number(lat) >= -90 &&
+        Number(lat) <= 90 &&
+        Number(lng) >= -180 &&
+        Number(lng) <= 180
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid lat and lng Values",
+      });
+    }
+
+    const places = await Entry.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [Number(lng), Number(lat)],
+          },
+          key: "location",
+          distanceField: "distance",
+          maxDistance: Number(radius) || 5000,
+          spherical: true,
+          query: {
+            userId: new Types.ObjectId(_id),
+          },
+        },
+      },
+      { $limit: 10 },
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      message: `Nearby Locations fetched successfully`,
+      data: places,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  createEntry,
+  getEntries,
+  getSingleEntry,
+  deleteEntry,
+  getEntriesNearby,
+};

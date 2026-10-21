@@ -2,7 +2,7 @@ import { z } from "zod";
 import { sessionOfDayEnum } from "../Models/EntrySchema/entrySchema.types.js";
 
 export const createEntryValidation = z.object({
-  content: z.string().min(1, "Content is required"),
+  content: z.string().trim().min(1, "Content is required"),
 
   mood: z.number().int().min(1).max(5),
 
