@@ -17,12 +17,7 @@ import {
 
 const Entries = () => {
   const navigate = useNavigate();
-
   const date = new Date();
-
-  console.log("Day : ", date.toLocaleString("en-US", { weekday: "long" }));
-  console.log("Date : ", date.getDate());
-  console.log("Month : ", date.toLocaleString("en-US", { month: "long" }));
 
   const handleNavigate = () => {
     navigate("/entries/new");
@@ -34,6 +29,7 @@ const Entries = () => {
       return response.data;
     } catch (err) {
       console.log("Failed to fetch User Entries : ", err);
+      throw err;
     }
   };
 
@@ -42,66 +38,44 @@ const Entries = () => {
     queryFn: fetchUserEntries,
   });
 
-  console.log("User Entries Data : ", data);
-  console.log("Loading State from Entries page :", isLoading);
-  console.log("Error state from Entries page : ", isError);
-
   if (isLoading) {
     return (
-      <div className="w-full h-screen bg-[#020617] flex flex-col items-center">
+      <div className="min-h-screen w-full bg-[#020617] text-white">
         <Navbar />
 
-        <div className="flex flex-col w-2/4 p-4">
-          {/* Header Skeleton */}
-          <div className="flex flex-row justify-between items-center w-full">
-            <div className="flex flex-col space-y-4">
-              {/* Date */}
-              <div className="h-6 w-48 rounded bg-gray-700 animate-pulse" />
-
-              {/* Your Entries */}
-              <div className="h-12 w-72 rounded bg-gray-700 animate-pulse" />
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-4">
+              <div className="h-6 w-40 rounded bg-gray-700 animate-pulse" />
+              <div className="h-12 w-56 rounded bg-gray-700 animate-pulse sm:w-72" />
             </div>
 
-            {/* New Entry Button */}
-            <div className="h-14 w-40 rounded-md bg-gray-700 animate-pulse" />
+            <div className="h-14 w-full rounded-md bg-gray-700 animate-pulse sm:w-40" />
           </div>
 
-          {/* Entries Skeleton */}
-          <div className="flex flex-col space-y-8 mt-8">
-            {/* Total Entries + Sort */}
-            <div className="flex flex-row justify-between items-center">
-              <div className="h-7 w-40 rounded bg-gray-700 animate-pulse" />
-              <div className="h-5 w-32 rounded bg-gray-700 animate-pulse" />
+          <div className="space-y-8">
+            <div className="flex items-center justify-between">
+              <div className="h-7 w-32 rounded bg-gray-700 animate-pulse" />
+              <div className="h-5 w-20 rounded bg-gray-700 animate-pulse" />
             </div>
 
-            {/* Skeleton Cards */}
             {Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center bg-gray-800 p-6 rounded-xl"
+                className="flex flex-col gap-4 rounded-xl bg-gray-800 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6"
               >
-                {/* Left side */}
-                <div className="flex flex-col justify-between h-24 flex-1">
-                  {/* Location + Time */}
-                  <div className="flex flex-row space-x-2">
+                <div className="flex min-w-0 flex-1 flex-col gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
                     <div className="h-4 w-4 rounded-full bg-gray-600 animate-pulse" />
-
-                    <div className="h-4 w-32 rounded bg-gray-600 animate-pulse" />
-
-                    <div className="h-4 w-20 rounded bg-gray-600 animate-pulse" />
+                    <div className="h-4 w-28 rounded bg-gray-600 animate-pulse" />
+                    <div className="h-4 w-16 rounded bg-gray-600 animate-pulse" />
                   </div>
-
-                  {/* Content */}
                   <div className="h-6 w-3/4 rounded bg-gray-600 animate-pulse" />
-
-                  {/* Mood */}
-                  <div className="h-4 w-28 rounded bg-gray-600 animate-pulse" />
+                  <div className="h-4 w-24 rounded bg-gray-600 animate-pulse" />
                 </div>
 
-                {/* Weather */}
-                <div className="flex flex-col items-center justify-center space-y-2">
+                <div className="flex items-center justify-center gap-2">
                   <div className="h-12 w-12 rounded-full bg-gray-600 animate-pulse" />
-
                   <div className="h-4 w-10 rounded bg-gray-600 animate-pulse" />
                 </div>
               </div>
@@ -114,16 +88,18 @@ const Entries = () => {
 
   if (isError) {
     return (
-      <div>
+      <div className="min-h-screen w-full bg-[#020617]">
         <Navbar />
-        <div className="flex flex-col items-center justify-center min-h-screen bg-[#020617] space-y-14  ">
-          <MdCloudOff className="text-orange-600 text-8xl" />
-          <p className="text-yellow-50 text-3xl">Couldn't load your entries</p>
-          <p className="text-gray-400 text-2xl">
+        <div className="flex min-h-[75vh] flex-col items-center justify-center space-y-8 px-4 text-center">
+          <MdCloudOff className="text-7xl text-orange-600 sm:text-8xl" />
+          <p className="text-2xl text-yellow-50 sm:text-3xl">
+            Couldn't load your entries
+          </p>
+          <p className="text-lg text-gray-400 sm:text-2xl">
             Check your connection and try again.
           </p>
           <button
-            className="bg-orange-600 transition duration-700 hover:bg-orange-400 text-white rounded-lg text-xl py-2 px-4"
+            className="rounded-lg bg-orange-600 px-4 py-2 text-base text-white transition duration-700 hover:bg-orange-400 sm:text-xl"
             onClick={() => refetch()}
           >
             Retry
@@ -134,83 +110,85 @@ const Entries = () => {
   }
 
   return (
-    <div className="w-full h-screen bg-[#020617] flex flex-col items-center">
+    <div className="min-h-screen w-full bg-[#020617] text-white">
       <Navbar />
 
-      {/* Entries section */}
-      <div className="flex flex-col w-2/4 bg-[#020617]  p-4">
-        <div className="flex flex-row justify-between items-center w-full bg-[#020617] ">
-          <div className="flex flex-col space-y-4 ">
-            <p className="text-2xl text-yellow-500">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-2 sm:space-y-4">
+            <p className="text-lg text-yellow-500 sm:text-2xl">
               {date.toLocaleString("en-US", { weekday: "long" })} ,{" "}
               {date.getDate()} {date.toLocaleString("en-US", { month: "long" })}
             </p>
-            <h1 className="text-3xl font-bold text-yellow-50 ">
+            <h1 className="text-2xl font-bold text-yellow-50 sm:text-3xl">
               {YOUR_ENTRIES}
             </h1>
           </div>
-          <div className="relative">
+
+          <div className="relative w-full sm:w-auto">
             <button
-              className="p-3 bg-yellow-500 text-black rounded-md font-bold tracking-widest transition-colors duration-700 hover:bg-yellow-400 px-8 text-xl"
+              className="flex w-full items-center justify-center gap-2 rounded-md bg-yellow-500 px-5 py-3 text-sm font-bold tracking-widest text-black transition-colors duration-700 hover:bg-yellow-400 sm:w-auto sm:text-xl"
               onClick={handleNavigate}
             >
+              <PiFeatherLight className="text-base" />
               {NEW_ENTRY}
             </button>
-            <PiFeatherLight className="absolute text-black bottom-4 left-2" />
           </div>
         </div>
-        {/* User Entries section */}
-        <div className="flex flex-col space-y-8 mt-8">
-          <div className="flex flex-row justify-between items-center">
-            <h1 className="text-2xl text-yellow-50 ">
-              {TOTAL_ENTRIES} {data?.data.length}{" "}
+
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-lg text-yellow-50 sm:text-2xl">
+              {TOTAL_ENTRIES} {data?.data.length ?? 0}
             </h1>
-            <p className="text-xl text-gray-300">
+            <p className="text-sm text-gray-300 sm:text-xl">
               {data?.data.length ? SORTED_DESC : ""}
             </p>
           </div>
 
           {data?.data.length ? (
-            data?.data.map((entry, id) => (
+            data.data.map((entry, id) => (
               <div
-                className={`flex justify-between items-center bg-yellow-50 p-6 rounded-xl shadow-lg ${entryColor[id + 1]} transition duration-300 hover:scale-105 cursor-pointer `}
-                key={id}
+                className={`flex cursor-pointer flex-col gap-4 rounded-xl bg-yellow-50 p-4 shadow-lg transition duration-300 hover:scale-[1.01] sm:flex-row sm:items-center sm:justify-between sm:p-6 ${entryColor[id + 1]}`}
+                key={entry._id}
                 onClick={() => navigate(`/entryDetail/${entry._id}`)}
               >
-                <div className="flex flex-col justify-between h-24 ">
-                  <div className="flex flex-row space-x-2 text-gray-500 font-medium">
-                    <FaLocationDot className="mt-1 text-red-600" />
+                <div className="flex min-w-0 flex-1 flex-col gap-3">
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500 sm:text-base">
+                    <FaLocationDot className="text-red-600" />
                     <p className="tracking-wider">{entry.placeName}</p>
                     <p className="tracking-wider">({entry.timeOfDay})</p>
                   </div>
 
-                  <p className="font-bold text-xl tracking-wider">
+                  <p className="break-words text-lg font-bold tracking-wider sm:text-xl text-black">
                     {entry.content}
                   </p>
-                  <p className="font-bold">{"🌟".repeat(entry.mood)}</p>
+                  <p className="text-base font-bold">
+                    {"??".repeat(entry.mood)}
+                  </p>
                 </div>
-                <div className="flex flex-col items-center justify-center">
+
+                <div className="flex items-center justify-center gap-3 sm:flex-col">
                   <img
                     src={`https://openweathermap.org/img/wn/${entry.weather.icon}@2x.png`}
+                    alt={entry.weather.condition || "Weather"}
+                    className="h-14 w-14 sm:h-16 sm:w-16"
                   />
-                  <p>{Math.floor(entry.weather.tempC)}°C</p>
+                  <p className="text-base font-medium sm:text-lg text-black">
+                    {Math.floor(entry.weather.tempC)}°C
+                  </p>
                 </div>
               </div>
             ))
           ) : (
-            // No Data section
-            <div className="flex flex-col items-center justify-center  bg-[#020617] space-y-14 border-2 border-dashed p-40 rounded-md">
-              <PiFeatherLight className="text-yellow-600 text-8xl" />
-              <p className="text-yellow-50 text-3xl">No entries yet</p>
-              <p className="text-gray-400 text-2xl">
+            <div className="flex flex-col items-center justify-center space-y-6 rounded-md border-2 border-dashed border-gray-600 bg-[#020617] p-10 text-center sm:p-16">
+              <PiFeatherLight className="text-7xl text-yellow-600 sm:text-8xl" />
+              <p className="text-2xl text-yellow-50 sm:text-3xl">
+                No entries yet
+              </p>
+              <p className="text-lg text-gray-400 sm:text-2xl">
                 Your first stamp is waiting to happen
               </p>
-              <button
-                className="bg-yellow-600 transition duration-700 hover:bg-yellow-400 text-white rounded-lg text-xl py-2 px-4"
-                onClick={() => handleNavigate()}
-              >
-                Write your first entry
-              </button>
             </div>
           )}
         </div>

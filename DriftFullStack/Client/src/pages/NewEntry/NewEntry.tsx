@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import Navbar from "../../components/Navbar";
 import { upperCase } from "../../utils/utilityFunctions";
 import { MdClear } from "react-icons/md";
@@ -17,6 +17,7 @@ import {
   SAVE_ENTRY,
 } from "../../constants/constantVariables";
 import { useNavigate } from "react-router-dom";
+
 const NewEntry = () => {
   const navigate = useNavigate();
 
@@ -31,12 +32,13 @@ const NewEntry = () => {
   const [isLocationCaptured, setIsLocationCaptured] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
+
     setEntryDetails((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "mood" ? Number(value) : value,
     }));
   };
 
@@ -57,10 +59,8 @@ const NewEntry = () => {
       },
       (error) => {
         console.error("Failed to get the current location : ", error);
-
         setLocationLoading(false);
         setIsLocationCaptured(false);
-
         toast.error("Failed to get your location");
       },
     );
@@ -78,51 +78,42 @@ const NewEntry = () => {
       navigate("/entries");
     },
     onError: () => {
-      toast.error("Failed to Add Enty");
+      toast.error("Failed to Add Entry");
     },
   });
 
-  const handleSubmit = (e: React.ChangeEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     entryMutation.mutate(entryDetails);
-    setEntryDetails({
-      content: "",
-      mood: 0,
-      lng: 0,
-      lat: 0,
-    });
   };
 
-  console.log("Entry details : ", entryDetails);
-
   return (
-    <div className="w-full min-h-screen">
+    <div className="min-h-screen w-full bg-[#020617]">
       <Navbar />
-      <div className="flex flex-col items-center justify-center w-full min-h-screen bg-[#020617]">
-        <div className="flex flex-col space-y-4 w-2/6 bg-yellow-50">
-          <div className="flex flex-row justify-between items-center bg-[#020617] p-4">
-            <h1 className="text-3xl text-yellow-50 ">{NEW_ENTRY}</h1>
+      <div className="flex w-full items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full max-w-2xl overflow-hidden rounded-xl bg-yellow-50 shadow-2xl">
+          <div className="flex items-center justify-between bg-[#020617] p-4 sm:p-6">
+            <h1 className="text-2xl text-yellow-50 sm:text-3xl">{NEW_ENTRY}</h1>
             <MdClear
               className="cursor-pointer text-yellow-50"
-              size={30}
+              size={28}
               onClick={() => navigate("/entries")}
             />
           </div>
-          <form
-            className="p-10 flex flex-col space-y-4"
-            onSubmit={handleSubmit}
-          >
+
+          <form className="flex flex-col gap-5 p-4 sm:p-8" onSubmit={handleSubmit}>
             <textarea
-              className="p-4 text-xl font-bold"
+              className="min-h-[180px] rounded-md border border-gray-300 bg-white p-4 text-base font-medium text-slate-800 outline-none transition focus:border-gray-500 sm:text-xl"
               name="content"
               value={entryDetails.content}
               rows={8}
-              cols={8}
               placeholder="what's on your mind, right now, right here ?"
               onChange={handleChange}
             />
-            <hr></hr>
-            <p className="text-xl font-bold text-gray-600">
+
+            <hr />
+
+            <p className="text-lg font-bold text-gray-600 sm:text-xl">
               {upperCase("Mood")} - {entryDetails.mood}/5
             </p>
             <input
@@ -133,21 +124,23 @@ const NewEntry = () => {
               max={5}
               step={1}
               onChange={handleChange}
+              className="w-full accent-yellow-600"
             />
+
             <button
               type="button"
-              className="border-4 border-dashed p-4 text-xl tracking-wider"
+              className="border-4 border-dashed border-gray-300 bg-white p-4 text-sm font-semibold tracking-wider text-slate-700 transition hover:border-yellow-500 sm:text-xl"
               onClick={handleLocation}
               disabled={locationLoading}
             >
               {locationLoading ? (
                 <div className="flex items-center justify-center gap-3">
-                  <div className="w-5 h-5 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+                  <div className="h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
                   <span>Fetching Location...</span>
                 </div>
               ) : isLocationCaptured ? (
-                <div className="flex flex-col text-sm">
-                  <h1>Location Captured Successfully</h1>
+                <div className="flex flex-col gap-1 text-left text-sm sm:text-base">
+                  <h1 className="font-bold">Location Captured Successfully</h1>
                   <p>
                     {LONGITUDE}: {entryDetails.lng}
                   </p>
@@ -156,19 +149,21 @@ const NewEntry = () => {
                   </p>
                 </div>
               ) : (
-                <div className="relative">
-                  <FaLocationArrow className="absolute left-36 top-1" />
-                  {CAPTURE_LOCATION_AND_WEATHER}
+                <div className="relative flex items-center justify-center gap-2">
+                  <FaLocationArrow className="text-sm sm:text-base" />
+                  <span>{CAPTURE_LOCATION_AND_WEATHER}</span>
                 </div>
               )}
             </button>
+
             <button
-              className="p-4 text-xl tracking-wider bg-black text-yellow-50 rounded-md"
-              onClick={() => handleSubmit}
+              type="submit"
+              className="rounded-md bg-black p-4 text-sm font-bold tracking-wider text-yellow-50 transition hover:bg-slate-800 sm:text-xl"
+              disabled={entryMutation.isPending}
             >
-              <span className="relative">
-                <FaArrowRight className="absolute left-28 top-1 " />
-                {SAVE_ENTRY}
+              <span className="flex items-center justify-center gap-2">
+                <FaArrowRight className="text-sm sm:text-base" />
+                {entryMutation.isPending ? "Saving..." : SAVE_ENTRY}
               </span>
             </button>
           </form>

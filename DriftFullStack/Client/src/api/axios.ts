@@ -7,14 +7,16 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    //config is a callback function ,
     const token = localStorage.getItem("token");
+
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; //we are sending token in every api call .
+      config.headers = config.headers ?? {};
+      config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
-  (error) => Promise.reject(error), //error is a callback function it gets executed if there is some issue with the response
+  (error) => Promise.reject(error),
 );
 
 export default api;
