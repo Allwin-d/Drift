@@ -45,3 +45,6 @@ export const CAPTURE_LOCATION_AND_WEATHER = "Capture location & weather";
 export const LONGITUDE = "Longitude";
 export const LATITUDE = "Latitude";
 export const SAVE_ENTRY = "Save Entry";
+
+//Dashboard
+export const DASHBOARD = "Dashboard";

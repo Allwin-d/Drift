@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/axios";
 import { ENTRY_API } from "../../url/url";
@@ -41,8 +40,6 @@ const Entries = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen w-full bg-[#020617] text-white">
-        <Navbar />
-
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-4">
@@ -89,7 +86,6 @@ const Entries = () => {
   if (isError) {
     return (
       <div className="min-h-screen w-full bg-[#020617]">
-        <Navbar />
         <div className="flex min-h-[75vh] flex-col items-center justify-center space-y-8 px-4 text-center">
           <MdCloudOff className="text-7xl text-orange-600 sm:text-8xl" />
           <p className="text-2xl text-yellow-50 sm:text-3xl">
@@ -111,8 +107,6 @@ const Entries = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#020617] text-white">
-      <Navbar />
-
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-2 sm:space-y-4">
@@ -163,8 +157,8 @@ const Entries = () => {
                   <p className="break-words text-lg font-bold tracking-wider sm:text-xl text-black">
                     {entry.content}
                   </p>
-                  <p className="text-base font-bold">
-                    {"??".repeat(entry.mood)}
+                  <p className="text-base font-bold text-black">
+                    Mood{entry.mood}
                   </p>
                 </div>
 

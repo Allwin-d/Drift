@@ -8,7 +8,6 @@ import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/axios";
 import type { userEntriesType } from "../Entries/entries.types";
-import Navbar from "../../components/Navbar";
 import { convertToDay } from "../../utils/utilityFunctions";
 import Loading from "../../components/Loading/Loading";
 import Error from "../../components/Error/Error";
@@ -55,7 +54,6 @@ const Map = () => {
 
   return (
     <div className="w-full h-screen bg-[#020617] flex flex-col items-center">
-      <Navbar />
       <div className="w-full flex-1 min-h-0 overflow-hidden rounded-xl">
         <MapContainer
           // Map open aagumbodhu center-la irukka vendiya latitude, longitude.

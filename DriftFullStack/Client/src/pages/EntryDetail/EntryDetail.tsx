@@ -17,7 +17,9 @@ const EntryDetail = () => {
   const [deleteEntryVisible, setDeleteEntryVisible] = useState(false);
 
   const getSingleEntry = async () => {
-    const response = await api.get<singleEntryResponseType>(`${ENTRY_API}/${id}`);
+    const response = await api.get<singleEntryResponseType>(
+      `${ENTRY_API}/${id}`,
+    );
     return response.data;
   };
 
@@ -104,7 +106,9 @@ const EntryDetail = () => {
 
             <div className="flex items-center gap-3 text-xl sm:text-3xl">
               <FaLocationDot className="text-orange-500" />
-              <p className="break-words text-orange-50">{data.data.placeName}</p>
+              <p className="break-words text-orange-50">
+                {data.data.placeName}
+              </p>
             </div>
           </div>
 
@@ -128,15 +132,18 @@ const EntryDetail = () => {
 
         <div className="p-2 sm:p-4">
           <p className="text-center text-lg text-green-600 sm:text-2xl">
-            {upperCase("Mood")} {"??".repeat(data.data.mood ?? 0)}
+            {upperCase("Mood")} {data.data.mood}
           </p>
         </div>
 
         {deleteEntryVisible ? (
           <div className="flex flex-col items-center justify-center rounded-md bg-gray-900 p-6 text-center sm:p-10">
-            <p className="text-xl text-yellow-50 sm:text-2xl">Delete this entry?</p>
+            <p className="text-xl text-yellow-50 sm:text-2xl">
+              Delete this entry?
+            </p>
             <p className="mt-4 text-sm text-gray-400 sm:text-xl">
-              This can't be undone. The entry and its stamp will be gone for good.
+              This can't be undone. The entry and its stamp will be gone for
+              good.
             </p>
 
             <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:justify-between">

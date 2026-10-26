@@ -1,6 +1,7 @@
 import { PiFireBold } from "react-icons/pi";
 import {
   CORELATIONS,
+  DASHBOARD,
   ENTRIES,
   INSIGHTS,
   LOG_OUT,
@@ -20,6 +21,12 @@ const Navbar = () => {
           <AppTitle />
 
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm sm:gap-5 lg:gap-8 lg:text-base">
+            <p
+              className="cursor-pointer hover:text-yellow-500 hover:underline hover:underline-offset-8 hover:transition duration-300"
+              onClick={() => navigate("/dashboard")}
+            >
+              {DASHBOARD}
+            </p>
             <p
               className="cursor-pointer hover:text-yellow-500 hover:underline hover:underline-offset-8 hover:transition duration-300"
               onClick={() => navigate("/entries")}
