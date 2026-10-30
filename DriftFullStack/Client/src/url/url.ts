@@ -1,8 +1,8 @@
 //Login
-export const LOGIN_API = "/auth/login";
+export const LOGIN_API = "/api/auth/login";
 
 //Register
-export const REGISTER_API = "/auth/register";
+export const REGISTER_API = "/api/auth/register";
 
 //addEntry
-export const ENTRY_API = "/entries";
+export const ENTRY_API = "/api/entries";
