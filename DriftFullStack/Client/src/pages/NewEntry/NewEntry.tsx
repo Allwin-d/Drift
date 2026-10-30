@@ -1,5 +1,4 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import Navbar from "../../components/Navbar";
 import { upperCase } from "../../utils/utilityFunctions";
 import { MdClear } from "react-icons/md";
 import { FaLocationArrow } from "react-icons/fa";
@@ -89,7 +88,6 @@ const NewEntry = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#020617]">
-      <Navbar />
       <div className="flex w-full items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
         <div className="w-full max-w-2xl overflow-hidden rounded-xl bg-yellow-50 shadow-2xl">
           <div className="flex items-center justify-between bg-[#020617] p-4 sm:p-6">
@@ -101,7 +99,10 @@ const NewEntry = () => {
             />
           </div>
 
-          <form className="flex flex-col gap-5 p-4 sm:p-8" onSubmit={handleSubmit}>
+          <form
+            className="flex flex-col gap-5 p-4 sm:p-8"
+            onSubmit={handleSubmit}
+          >
             <textarea
               className="min-h-[180px] rounded-md border border-gray-300 bg-white p-4 text-base font-medium text-slate-800 outline-none transition focus:border-gray-500 sm:text-xl"
               name="content"

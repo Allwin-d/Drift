@@ -158,7 +158,7 @@ const Entries = () => {
                     {entry.content}
                   </p>
                   <p className="text-base font-bold text-black">
-                    Mood{entry.mood}
+                    {"⭐".repeat(entry.mood)}
                   </p>
                 </div>
 

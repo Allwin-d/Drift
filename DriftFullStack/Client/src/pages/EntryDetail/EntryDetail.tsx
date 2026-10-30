@@ -132,7 +132,7 @@ const EntryDetail = () => {
 
         <div className="p-2 sm:p-4">
           <p className="text-center text-lg text-green-600 sm:text-2xl">
-            {upperCase("Mood")} {data.data.mood}
+            {upperCase("Mood")} {"⭐".repeat(data.data.mood)}
           </p>
         </div>
 

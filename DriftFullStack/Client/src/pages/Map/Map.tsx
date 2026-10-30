@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import api from "../../api/axios";
 import type { userEntriesType } from "../Entries/entries.types";
 import { convertToDay } from "../../utils/utilityFunctions";
+import { ENTRY_API } from "../../url/url";
 import Loading from "../../components/Loading/Loading";
 import Error from "../../components/Error/Error";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +33,7 @@ const Map = () => {
   const navigate = useNavigate();
 
   const fetchEntries = async () => {
-    const result = await api.get<userEntriesType>("/entries");
+    const result = await api.get<userEntriesType>(ENTRY_API);
     return result.data.data;
   };
 
