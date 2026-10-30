@@ -11,12 +11,11 @@ dotenv.config();
 const PORT = process.env.PORT || 6969;
 const app = express();
 
-app.use(cors());
 app.use(express.json()); //parse the incoming requested JSON
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://drift-one-self.vercel.app/"],
+    origin: ["http://localhost:5173", "https://drift-one-self.vercel.app"],
     credentials: true,
   }),
 );
