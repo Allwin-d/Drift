@@ -16,7 +16,7 @@ app.use(express.json()); //parse the incoming requested JSON
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://drift-one-self.vercel.app/"],
     credentials: true,
   }),
 );

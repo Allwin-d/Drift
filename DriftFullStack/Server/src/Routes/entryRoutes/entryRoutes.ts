@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.get("/", verifyToken, getEntries);
 router.post("/", verifyToken, createEntry);
+router.get("/nearby", verifyToken, getEntriesNearby);
 router.delete("/:id", verifyToken, deleteEntry);
 router.get("/:id", verifyToken, getSingleEntry);
-router.get("/nearby", verifyToken, getEntriesNearby);
 
 export default router;
