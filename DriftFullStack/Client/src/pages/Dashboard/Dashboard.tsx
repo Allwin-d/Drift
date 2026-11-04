@@ -3,6 +3,12 @@ import NewEntryButton from "../../components/NewEntryButton/NewEntryButton";
 import Map from "../Map/Map";
 
 import "leaflet/dist/leaflet.css";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUserEntries } from "../../services/fetchUserEntriesService";
+import Loading from "../../components/Loading/Loading";
+import Error from "../../components/Error/Error";
+import { RECENT_ENTRIES } from "../../constants/constantVariables";
+import EntryRow from "../../components/EntryRow/EntryRow";
 // Leaflet map-ku thevaiyana default CSS styles import panrom.
 
 const Dashboard = () => {
@@ -16,6 +22,21 @@ const Dashboard = () => {
   console.log("month : ", month);
   console.log("day : ", day);
   console.log("Hour : ", hour);
+
+  const limit = 5;
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["userEntries", "Recent", limit],
+    queryFn: () => fetchUserEntries({ limit }),
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <div className="min-h-screen w-full bg-[#020617] text-white">
@@ -65,6 +86,24 @@ const Dashboard = () => {
               </button>
             </div>
             <Map />
+          </div>
+        </div>
+
+        {/* Recent entries section */}
+        <div className="flex flex-col mx-auto gap-6 px-4 py-6 sm:px-6 lg:px-8 w-full">
+          <div className="flex flex-row items-center justify-between">
+            <p>{RECENT_ENTRIES}</p>
+            <button
+              type="button"
+              className="shrink-0 text-xs font-semibold text-orange-600 transition-colors hover:text-orange-700"
+            >
+              View All →
+            </button>
+          </div>
+          <div className="flex flex-col gap-4">
+            {data?.data.map((entry, id) => (
+              <EntryRow entry={entry} id={id} />
+            ))}
           </div>
         </div>
       </div>

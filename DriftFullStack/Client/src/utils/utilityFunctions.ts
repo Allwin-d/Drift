@@ -1,3 +1,5 @@
+
+
 export const upperCase = (value: string) => {
   return value.toUpperCase();
 };
@@ -78,3 +80,5 @@ export const sessionRange = (hour: number) => {
     return "Night";
   }
 };
+
+

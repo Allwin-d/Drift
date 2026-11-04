@@ -38,7 +38,7 @@ const Map = () => {
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["entries"],
+    queryKey: ["UserEntries", "Map"],
     queryFn: fetchEntries,
   });
 

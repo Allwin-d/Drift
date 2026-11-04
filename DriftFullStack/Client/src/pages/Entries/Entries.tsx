@@ -1,11 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import api from "../../api/axios";
-import { ENTRY_API } from "../../url/url";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdCloudOff } from "react-icons/md";
 import { PiFeatherLight } from "react-icons/pi";
-import type { userEntriesType } from "./entries.types";
 import { entryColor } from "../../constants/constantObjects";
 import {
   NEW_ENTRY,
@@ -13,6 +10,7 @@ import {
   TOTAL_ENTRIES,
   YOUR_ENTRIES,
 } from "../../constants/constantVariables";
+import { fetchUserEntries } from "../../services/fetchUserEntriesService";
 
 const Entries = () => {
   const navigate = useNavigate();
@@ -22,19 +20,9 @@ const Entries = () => {
     navigate("/entries/new");
   };
 
-  const fetchUserEntries = async () => {
-    try {
-      const response = await api.get<userEntriesType>(ENTRY_API);
-      return response.data;
-    } catch (err) {
-      console.log("Failed to fetch User Entries : ", err);
-      throw err;
-    }
-  };
-
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["userEntries"],
-    queryFn: fetchUserEntries,
+    queryKey: ["userEntries", "list"],
+    queryFn: () => fetchUserEntries({}),
   });
 
   if (isLoading) {

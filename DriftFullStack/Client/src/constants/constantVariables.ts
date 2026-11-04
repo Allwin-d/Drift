@@ -48,3 +48,4 @@ export const SAVE_ENTRY = "Save Entry";
 
 //Dashboard
 export const DASHBOARD = "Dashboard";
+export const RECENT_ENTRIES = "Recent Entries";
