@@ -4,7 +4,7 @@ import { MdClear } from "react-icons/md";
 import { FaLocationArrow } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import type { entryDetailsType } from "./newEntry.types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/axios";
 import { ENTRY_API } from "../../url/url";
 import toast from "react-hot-toast";
@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 const NewEntry = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [entryDetails, setEntryDetails] = useState<entryDetailsType>({
     content: "",
@@ -72,7 +73,8 @@ const NewEntry = () => {
 
   const entryMutation = useMutation({
     mutationFn: createEntry,
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["userEntries"] });
       toast.success("Entry Added Successfully");
       navigate("/entries");
     },

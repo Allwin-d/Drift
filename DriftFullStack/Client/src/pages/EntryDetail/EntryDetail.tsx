@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/axios";
 import { ENTRY_API } from "../../url/url";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +14,7 @@ import type { deleteEntryType } from "./entryDetail.types";
 const EntryDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [deleteEntryVisible, setDeleteEntryVisible] = useState(false);
 
   const getSingleEntry = async () => {
@@ -44,7 +45,8 @@ const EntryDetail = () => {
 
   const deleteMutation = useMutation({
     mutationFn: deleteEntry,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
+      await queryClient.invalidateQueries({ queryKey: ["userEntries"] });
       toast.success(`${response.data.message}`);
       navigate("/entries");
     },

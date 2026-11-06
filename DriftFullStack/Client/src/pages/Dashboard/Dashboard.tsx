@@ -1,42 +1,41 @@
 import { findDay, findMonth, sessionRange } from "../../utils/utilityFunctions";
 import NewEntryButton from "../../components/NewEntryButton/NewEntryButton";
-import Map from "../Map/Map";
-
-import "leaflet/dist/leaflet.css";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUserEntries } from "../../services/fetchUserEntriesService";
-import Loading from "../../components/Loading/Loading";
-import Error from "../../components/Error/Error";
 import { RECENT_ENTRIES } from "../../constants/constantVariables";
 import EntryRow from "../../components/EntryRow/EntryRow";
-// Leaflet map-ku thevaiyana default CSS styles import panrom.
+import MapView from "../../components/MapView/MapView";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const date = new Date();
   const currentDate = date.getDate();
   const month = date.getMonth();
   const day = date.getDay();
   const hour = date.getHours();
 
-  console.log("currentDAte : ", currentDate);
-  console.log("month : ", month);
-  console.log("day : ", day);
-  console.log("Hour : ", hour);
+  const recentLimit = 5;
+  const mapLimit = 100;
 
-  const limit = 5;
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["userEntries", "Recent", limit],
-    queryFn: () => fetchUserEntries({ limit }),
+  const {
+    data: recentData,
+    isLoading: isRecentLoading,
+    isError: isRecentError,
+    refetch: refetchRecent,
+  } = useQuery({
+    queryKey: ["userEntries", "recent", recentLimit],
+    queryFn: () => fetchUserEntries({ limit: recentLimit }),
   });
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (isError) {
-    return <Error />;
-  }
+  const {
+    data: mapData,
+    isLoading: isMapLoading,
+    isError: isMapError,
+    refetch: refetchMap,
+  } = useQuery({
+    queryKey: ["userEntries", "map", mapLimit],
+    queryFn: () => fetchUserEntries({ limit: mapLimit }),
+  });
 
   return (
     <div className="min-h-screen w-full bg-[#020617] text-white">
@@ -78,14 +77,37 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className=" min-w-0 flex-1 overflow-hidden bg-gray-600 sm:p-4 lg:p-8">
-            <div className="flex flex-row items-center justify-between">
+          <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-gray-600 p-4 lg:p-8">
+            <div className="flex shrink-0 flex-row items-center justify-between">
               <p>Map Preview</p>
-              <button className="shrink-0 text-xs font-semibold text-orange-600 transition-colors hover:text-orange-700">
+              <button
+                type="button"
+                onClick={() => navigate("/map")}
+                className="shrink-0 text-xs font-semibold text-orange-600 transition-colors hover:text-orange-700"
+              >
                 Open map →
               </button>
             </div>
-            <Map />
+            <div className="mt-2 flex-1 min-h-0">
+              {isMapLoading ? (
+                <div className="flex h-full items-center justify-center">
+                  Loading map...
+                </div>
+              ) : isMapError ? (
+                <div className="flex h-full flex-col items-center justify-center gap-2">
+                  <p>Could not load map.</p>
+                  <button type="button" onClick={() => refetchMap()}>
+                    Retry
+                  </button>
+                </div>
+              ) : (
+                <MapView
+                  entries={mapData?.data ?? []}
+                  interactive={false}
+                  className="h-full w-full"
+                />
+              )}
+            </div>
           </div>
         </div>
 
@@ -95,15 +117,33 @@ const Dashboard = () => {
             <p>{RECENT_ENTRIES}</p>
             <button
               type="button"
+              onClick={() => navigate("/entries")}
               className="shrink-0 text-xs font-semibold text-orange-600 transition-colors hover:text-orange-700"
             >
               View All →
             </button>
           </div>
           <div className="flex flex-col gap-4">
-            {data?.data.map((entry, id) => (
-              <EntryRow entry={entry} id={id} />
-            ))}
+            {isRecentLoading ? (
+              <p className="text-gray-400">Loading recent entries...</p>
+            ) : isRecentError ? (
+              <div className="flex items-center gap-4 text-gray-400">
+                <p>Could not load recent entries.</p>
+                <button
+                  type="button"
+                  onClick={() => refetchRecent()}
+                  className="text-orange-500 hover:text-orange-400"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : recentData?.data.length ? (
+              recentData.data.map((entry, id) => (
+                <EntryRow key={entry._id} entry={entry} id={id} />
+              ))
+            ) : (
+              <p className="text-gray-400">No entries yet.</p>
+            )}
           </div>
         </div>
       </div>
