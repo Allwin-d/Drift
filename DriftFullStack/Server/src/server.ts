@@ -24,8 +24,6 @@ app.get("/", (req, res) => {
   res.send("Server is running 🚀");
 });
 
-connectToDb();
-
 //auth Routes
 app.use("/api/auth", authRoutes);
 
@@ -35,8 +33,16 @@ app.use("/api/entries", entryRoutes);
 //error handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const startServer = async () => {
+  await connectToDb();
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+
+startServer().catch((error: unknown) => {
+  console.error("Server startup failed", error);
+  process.exitCode = 1;
 });
 
 export default app;

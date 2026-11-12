@@ -160,7 +160,7 @@ The server depends on environment variables such as:
 
 ```bash
 PORT=6969
-MONGO_URI=your_mongodb_connection_string
+MONGO_DB_CREDENTIALS=your_mongodb_connection_string
 JWT_SECRET_KEY=your_jwt_secret
 OPEANWEATHER_API_KEY=your_weather_api_key
 ```

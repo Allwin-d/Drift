@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 
 const connectToDb = async () => {
+  const mongoURL = process.env.MONGO_DB_CREDENTIALS;
+  if (!mongoURL) {
+    throw new Error("MongoDB connection URL is missing");
+  }
+
   try {
-    const mongoURL = process.env.MONGO_DB_CREDENTIALS ?? "";
-    if (!mongoURL) {
-      console.log("Mongo DB credentials URL is missing");
-    } else {
-      await mongoose.connect(mongoURL);
-      console.log("Database Connected Successfully");
-    }
-  } catch (err) {
-    console.error("Failed to Connect to Database");
+    await mongoose.connect(mongoURL);
+    console.log("Database Connected Successfully");
+  } catch (error) {
+    console.error("Failed to connect to database", error);
+    throw error;
   }
 };
 
