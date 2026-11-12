@@ -37,7 +37,7 @@ const Login = () => {
   };
 
   const loginUser = async (userDetail: loginUserDetailType) => {
-    const response = await api.post(LOGIN_API, userDetail);
+    const response = await api.post(LOGIN_API, userDetail, { timeout: 90_000 });
     return response.data;
   };
 
