@@ -5,6 +5,7 @@ import connectToDb from "./Db/Db.js";
 import authRoutes from "./Routes/authRoutes/authRoutes.js";
 import entryRoutes from "./Routes/entryRoutes/entryRoutes.js";
 import errorHandler from "./Middleware/errorHandler.middleware.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 6969;
 const app = express();
 
 app.use(express.json()); //parse the incoming requested JSON
+app.use(cookieParser());
 
 app.use(
   cors({
