@@ -4,6 +4,7 @@ import { LOGIN_API } from "../url/url";
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
   timeout: 10000,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(

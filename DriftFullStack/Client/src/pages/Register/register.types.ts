@@ -1,7 +1,7 @@
 export type registerUserDetailType = {
   name: string;
   email: string;
-  passwordHash: string;
+  password: string;
 };
 
 export type registerResponseType = {

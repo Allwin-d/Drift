@@ -30,7 +30,7 @@ const Register = () => {
   const [userDetail, setUserDetail] = useState<registerUserDetailType>({
     name: "",
     email: "",
-    passwordHash: "",
+    password: "",
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -80,11 +80,21 @@ const Register = () => {
         </div>
 
         <div className="mt-8 flex flex-row items-center gap-4 sm:gap-6">
-          <img src={postMarkStamp} alt="postmark stamp" className="h-20 w-20 sm:h-24 sm:w-24" />
+          <img
+            src={postMarkStamp}
+            alt="postmark stamp"
+            className="h-20 w-20 sm:h-24 sm:w-24"
+          />
           <div className="flex flex-col items-center justify-center gap-2 font-bold lg:items-start">
-            <p className="text-sm text-gray-400 sm:text-lg">{upperCase(`${ENTRY}`)}#0001</p>
-            <p className="text-sm text-gray-400 sm:text-lg">{upperCase(`${YOUR_FIRST_STAMP}`)}</p>
-            <p className="text-sm text-yellow-600 sm:text-lg">{upperCase(`${AWAITS}`)}</p>
+            <p className="text-sm text-gray-400 sm:text-lg">
+              {upperCase(`${ENTRY}`)}#0001
+            </p>
+            <p className="text-sm text-gray-400 sm:text-lg">
+              {upperCase(`${YOUR_FIRST_STAMP}`)}
+            </p>
+            <p className="text-sm text-yellow-600 sm:text-lg">
+              {upperCase(`${AWAITS}`)}
+            </p>
           </div>
         </div>
       </div>
@@ -94,9 +104,14 @@ const Register = () => {
           <h1 className="mb-3 text-3xl font-bold sm:text-4xl lg:text-5xl">
             {START_YOUR_JOURNAL}
           </h1>
-          <p className="mb-8 text-lg text-gray-500 sm:text-2xl">{TAKES_A_MIN}</p>
+          <p className="mb-8 text-lg text-gray-500 sm:text-2xl">
+            {TAKES_A_MIN}
+          </p>
 
-          <form className="flex flex-col space-y-6 sm:space-y-8" onSubmit={handleSubmit}>
+          <form
+            className="flex flex-col space-y-6 sm:space-y-8"
+            onSubmit={handleSubmit}
+          >
             <label className="text-lg font-medium text-gray-500 sm:text-2xl">
               {upperCase(`${NAME}`)}
             </label>
@@ -132,7 +147,7 @@ const Register = () => {
               name="passwordHash"
               placeholder="**********"
               autoComplete="current-password"
-              value={userDetail.passwordHash}
+              value={userDetail.password}
               onChange={handleChange}
             />
 
@@ -141,7 +156,9 @@ const Register = () => {
               className="rounded-md bg-black p-3 text-sm font-bold tracking-widest text-white transition-colors duration-700 hover:bg-slate-800 sm:text-base"
               disabled={registerMutation.isPending}
             >
-              {registerMutation.isPending ? "Creating account..." : CREATE_ACCOUNT}
+              {registerMutation.isPending
+                ? "Creating account..."
+                : CREATE_ACCOUNT}
             </button>
           </form>
 

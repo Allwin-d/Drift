@@ -25,7 +25,7 @@ const Login = () => {
 
   const [userDetail, setUserDetail] = useState<loginUserDetailType>({
     email: "",
-    passwordHash: "",
+    password: "",
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,21 +76,36 @@ const Login = () => {
         </div>
 
         <div className="mt-8 flex flex-row items-center gap-4 sm:gap-6">
-          <img src={postMarkStamp} alt="postmark stamp" className="h-20 w-20 sm:h-24 sm:w-24" />
+          <img
+            src={postMarkStamp}
+            alt="postmark stamp"
+            className="h-20 w-20 sm:h-24 sm:w-24"
+          />
           <div className="flex flex-col items-center justify-center gap-2 font-bold lg:items-start">
-            <p className="text-sm text-gray-400 sm:text-lg">{upperCase("entry")}#0142</p>
-            <p className="text-sm text-gray-400 sm:text-lg">{upperCase("marina beach")}</p>
-            <p className="text-sm text-green-600 sm:text-lg">{upperCase("mood")}5/5</p>
+            <p className="text-sm text-gray-400 sm:text-lg">
+              {upperCase("entry")}#0142
+            </p>
+            <p className="text-sm text-gray-400 sm:text-lg">
+              {upperCase("marina beach")}
+            </p>
+            <p className="text-sm text-green-600 sm:text-lg">
+              {upperCase("mood")}5/5
+            </p>
           </div>
         </div>
       </div>
 
       <div className="flex w-full items-center justify-center bg-yellow-50 px-4 py-10 lg:w-1/2 lg:px-8">
         <div className="w-full max-w-xl">
-          <h1 className="mb-3 text-3xl font-bold sm:text-4xl lg:text-5xl">{WELCOME_BACK}</h1>
+          <h1 className="mb-3 text-3xl font-bold sm:text-4xl lg:text-5xl">
+            {WELCOME_BACK}
+          </h1>
           <p className="mb-8 text-lg text-gray-500 sm:text-2xl">{PICK_UP}</p>
 
-          <form className="flex flex-col space-y-6 sm:space-y-8" onSubmit={handleSubmit}>
+          <form
+            className="flex flex-col space-y-6 sm:space-y-8"
+            onSubmit={handleSubmit}
+          >
             <label className="text-lg font-medium text-gray-500 sm:text-2xl">
               {upperCase(`${EMAIL}`)}
             </label>
@@ -110,10 +125,10 @@ const Login = () => {
             <input
               className="border-2 border-gray-300 bg-white p-3 text-base font-medium outline-none transition focus:border-gray-500 sm:text-xl"
               type="password"
-              name="passwordHash"
+              name="password"
               placeholder="**********"
               autoComplete="current-password"
-              value={userDetail.passwordHash}
+              value={userDetail.password}
               onChange={handleChange}
             />
 
