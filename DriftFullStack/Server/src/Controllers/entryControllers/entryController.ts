@@ -14,7 +14,6 @@ export const createEntry = async (
   next: NextFunction,
 ) => {
   try {
-    console.log("Request.user info :", req.user);
     const { _id } = req.user as userType;
     const result = createEntryValidation.safeParse(req.body);
 
@@ -26,7 +25,6 @@ export const createEntry = async (
     }
 
     const { content, mood, lat, lng } = result.data;
-    console.log("Content details : ", content, mood, lat, lng);
 
     const [geoLocationDataResponse, weatherDataResponse] = await Promise.all([
       geoCoding(lat, lng),

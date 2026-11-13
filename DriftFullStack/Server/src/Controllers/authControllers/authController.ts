@@ -6,8 +6,6 @@ import jwt from "jsonwebtoken";
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, email, password } = req.body;
-    console.log("User Details for Register : ", req.body);
-
     const user = await User.findOne({ email }); //This once gets the email that matches the userEmail
     if (user) {
       return res.status(400).json({
@@ -45,7 +43,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email }); //finding whether the email actually exist or not...
-    console.log("User Details in login : ", user);
 
     if (!user) {
       return res.status(401).json({
@@ -55,7 +52,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.passwordHash); //checks whether the user entered password and the password in the DB are same
-    console.log("Valid Details : ", isPasswordMatch);
     if (!isPasswordMatch) {
       return res.status(401).json({
         success: false,

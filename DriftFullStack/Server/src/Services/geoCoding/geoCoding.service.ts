@@ -11,7 +11,6 @@ const geoCoding = async (lat: number, lng: number) => {
     });
 
     const geoCodingData = response.data;
-    console.log("GeoCoding Data : ", geoCodingData);
     if (!geoCodingData) {
       throw new Error("Geo Coding Data not Available");
     }
