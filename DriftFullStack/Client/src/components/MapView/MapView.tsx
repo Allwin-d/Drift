@@ -20,6 +20,7 @@ type MapViewProps = {
   entries: entryDetailsType[];
   interactive?: boolean;
   showLayerToggle?: boolean;
+  onResetFilters?: () => void;
   className?: string;
 };
 
@@ -80,6 +81,7 @@ const MapView = ({
   entries,
   interactive = true,
   showLayerToggle = false,
+  onResetFilters,
   className = "w-full h-full",
 }: MapViewProps) => {
   const navigate = useNavigate();
@@ -106,7 +108,41 @@ const MapView = ({
       }),
     [entries],
   );
-  console.log("Map Entries : ", entries);
+
+  if (positionedEntries.length === 0) {
+    return (
+      <div
+        role="status"
+        className={`relative flex h-full min-h-0 w-full items-center justify-center overflow-hidden bg-[#11151f] text-center ${className}`}
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px)",
+          backgroundSize: "42px 42px",
+        }}
+      >
+        <div className="flex flex-col items-center px-4">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full border-2 border-dashed border-amber-400 font-mono text-amber-400">
+            0
+          </div>
+          <h2 className="font-serif text-lg text-orange-50">
+            No entries match these filters
+          </h2>
+          <p className="mt-2 text-sm text-slate-400">
+            Try a wider date range or another mood.
+          </p>
+          {onResetFilters && (
+            <button
+              type="button"
+              onClick={onResetFilters}
+              className="mt-4 rounded-md bg-amber-400 px-4 py-2 text-sm font-medium text-slate-950 transition-colors hover:bg-amber-300"
+            >
+              Reset filters
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

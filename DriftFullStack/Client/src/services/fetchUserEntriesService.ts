@@ -5,7 +5,7 @@ import { ENTRY_API } from "../url/url";
 export type fetchUserEntriesProps = {
   page?: number;
   limit?: number;
-  mood?: number;
+  mood?: number | null;
 };
 
 export const fetchUserEntries = async ({
