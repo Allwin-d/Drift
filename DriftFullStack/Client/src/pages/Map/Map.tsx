@@ -31,6 +31,7 @@ const MapPage = () => {
         ) : (
           <MapView
             entries={data?.data ?? []}
+            showLayerToggle
             className="h-full w-full"
           />
         )}
