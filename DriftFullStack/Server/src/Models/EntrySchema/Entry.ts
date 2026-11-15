@@ -49,5 +49,10 @@ export const entrySchema = new mongoose.Schema({
 
 entrySchema.index({ location: "2dsphere" });
 
+entrySchema.index({
+  userId: 1,
+  createdAt: -1,
+});
+
 const Entry = mongoose.model("Entry", entrySchema);
 export default Entry;
